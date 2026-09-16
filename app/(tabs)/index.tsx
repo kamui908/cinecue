@@ -46,9 +46,7 @@ export default function HomeScreen() {
       {/* Header */}
       <View className="px-4 mb-6">
         <Text className="text-dark-400 text-sm">Welcome back</Text>
-        <Text className="text-white text-2xl font-bold mt-1">
-          Cine<span className="text-primary-500">Cue</span>
-        </Text>
+        <Text className="text-white text-2xl font-bold mt-1"> Cine<Text className="text-primary-500">Cue</Text></Text>
       </View>
 
       {isLoading ? (

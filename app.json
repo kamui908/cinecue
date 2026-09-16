@@ -14,7 +14,7 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#0f172a",
-        "foregroundImage": "./assets/android-icon-foreground.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
@@ -26,7 +26,17 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-router"
-    ]
+      "expo-router",
+      "expo-font",
+      "expo-splash-screen",
+      "expo-web-browser"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "5e97938a-66ec-44dd-8864-01c0f8c87b58"
+      }
+    },
+    "owner": "zen4me"
   }
 }
