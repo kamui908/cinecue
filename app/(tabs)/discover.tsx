@@ -169,7 +169,7 @@ export default function DiscoverScreen() {
               />
               <Text
                 className={`text-sm font-bold ${
-                  activeTab === tab.key ? 'text-typography-50' : 'text-typography-400'
+                  activeTab === tab.key ? 'text-white' : 'text-typography-400'
                 }`}
               >
                 {tab.label}
@@ -193,7 +193,7 @@ export default function DiscoverScreen() {
               key={cat.key}
               onPress={() => setActiveCategory(cat.key)}
               className={`mr-2 px-4 py-2 rounded-full flex-row items-center gap-1 ${
-                activeCategory === cat.key ? 'bg-background-800' : 'bg-background-800/50'
+                activeCategory === cat.key ? 'bg-primary-500' : 'bg-background-800/50'
               }`}
             >
               {CatIcon && (
@@ -204,7 +204,7 @@ export default function DiscoverScreen() {
               )}
               <Text
                 className={`text-xs font-semibold ${
-                  activeCategory === cat.key ? 'text-typography-50' : 'text-typography-400'
+                  activeCategory === cat.key ? 'text-white' : 'text-typography-400'
                 }`}
               >
                 {cat.label}

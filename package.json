@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo-google-fonts/playfair-display": "^0.4.2",
     "@gluestack-style/react": "^1.0.57",
     "@gluestack-ui/nativewind-utils": "^1.0.28",
     "@gluestack-ui/overlay": "^0.1.22",

@@ -1,4 +1,5 @@
 import React from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Box, Text, HStack, VStack, Pressable, Image } from './ui/gluestack';
 import { Link } from 'expo-router';
 import { Images } from '../api/tmdb';
@@ -29,16 +30,20 @@ export function TVCard({ show, variant = 'poster' }: Props) {
                 <Text className="text-typography-400 text-sm">No Image</Text>
               </Box>
             )}
-            <Box className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+            <LinearGradient
+              colors={['transparent', 'rgba(0,0,0,0.85)']}
+              locations={[0.2, 1]}
+              style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 120 }}
+            />
             <Box className="absolute bottom-0 left-0 right-0 p-3">
-              <Text className="text-typography-50 text-sm font-bold" numberOfLines={1}>
+              <Text className="text-white text-sm font-bold" numberOfLines={1}>
                 {show.name}
               </Text>
               <HStack className="items-center gap-2 mt-1">
-                <Text className="text-typography-400 text-xs">{formatYear(show.first_air_date)}</Text>
+                <Text className="text-white/70 text-xs">{formatYear(show.first_air_date)}</Text>
                 <HStack className="items-center gap-1">
                   <Icons.Star size={12} className="text-warning-500" />
-                  <Text className="text-typography-50 text-xs font-semibold">
+                  <Text className="text-white text-xs font-semibold">
                     {formatRating(show.vote_average)}
                   </Text>
                 </HStack>
@@ -58,12 +63,12 @@ export function TVCard({ show, variant = 'poster' }: Props) {
             {show.poster_path ? (
               <Image
                 source={{ uri: Images.poster(show.poster_path, 'w92') }}
-                className="w-12 h-18 rounded-lg"
+                className="w-12 h-[72px] rounded-lg"
                 resizeMode="cover"
                 alt="Poster"
               />
             ) : (
-              <Box className="w-12 h-18 rounded-lg bg-background-700 items-center justify-center">
+              <Box className="w-12 h-[72px] rounded-lg bg-background-700 items-center justify-center">
                 <Text className="text-typography-400 text-[10px]">No</Text>
               </Box>
             )}

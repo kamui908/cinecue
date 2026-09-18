@@ -115,7 +115,7 @@ export default function SearchScreen() {
             >
               <Text
                 className={`text-sm font-semibold ${
-                  filter === f.key ? 'text-typography-50' : 'text-typography-400'
+                  filter === f.key ? 'text-white' : 'text-typography-400'
                 }`}
               >
                 {f.label}

@@ -20,10 +20,12 @@ import {
   Center,
 } from '../../src/components/ui/gluestack';
 import { Icons } from '../../src/components/Icons';
+import { useTheme } from '../../src/theme/ThemeContext';
 
 export default function TVDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const tvId = Number(id);
+  const { resolved } = useTheme();
   const { data: show, isLoading } = useTVDetail(tvId);
   const {
     addToWatchlist,
@@ -71,7 +73,7 @@ export default function TVDetailScreen() {
           onPress={() => router.back()}
           className="absolute top-12 left-4 bg-background-900/80 rounded-full p-2"
         >
-          <Icons.ChevronLeft size={20} color="#f5f5f5" />
+          <Icons.ChevronLeft size={20} color={resolved === 'dark' ? '#f5f5f5' : '#18181b'} />
         </Pressable>
 
         {/* Actions */}
@@ -92,7 +94,7 @@ export default function TVDetailScreen() {
             className="bg-background-900/80 rounded-full p-2"
           >
             {isFav ? (
-              <Icons.Heart size={20} color="#ec4899" fill="#ec4899" />
+              <Icons.Heart size={20} color="#ef4444" fill="#ef4444" />
             ) : (
               <Icons.Heart size={20} color="#8c8c8c" />
             )}
@@ -129,7 +131,7 @@ export default function TVDetailScreen() {
             className="absolute bottom-4 left-1/2 -ml-24 bg-primary-500 rounded-full px-8 py-3 flex-row items-center gap-2"
           >
             <Icons.Play size={16} color="#ffffff" />
-            <Text className="text-typography-50 text-sm font-bold">
+            <Text className="text-white text-sm font-bold">
               Watch Trailer
             </Text>
           </Pressable>
@@ -141,7 +143,7 @@ export default function TVDetailScreen() {
         {/* Title + Rating */}
         <HStack className="items-start justify-between">
           <VStack className="flex-1 mr-4">
-            <Text className="text-typography-50 text-2xl font-bold">
+            <Text className="text-typography-50 text-4xl font-bold leading-tight">
               {show.name}
             </Text>
             {show.tagline ? (
@@ -152,7 +154,7 @@ export default function TVDetailScreen() {
           </VStack>
           <Box className="bg-primary-500/20 rounded-full px-3 py-2 items-center">
             <HStack className="items-center gap-1">
-              <Icons.Star size={14} color="#ec4899" />
+              <Icons.Star size={14} color="#ef4444" />
               <Text className="text-primary-400 text-lg font-bold">
                 {show.vote_average.toFixed(1)}
               </Text>

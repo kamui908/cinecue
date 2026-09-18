@@ -175,7 +175,7 @@ module.exports = {
         },
       },
       fontFamily: {
-        heading: undefined,
+        heading: ["PlayfairDisplay_700Bold", "Georgia", "serif"],
         body: undefined,
         mono: undefined,
       },

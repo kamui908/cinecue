@@ -38,7 +38,7 @@ export default function WatchlistScreen() {
           />
           <Text
             className={`text-sm font-bold ${
-              tab === 'watchlist' ? 'text-typography-50' : 'text-typography-400'
+              tab === 'watchlist' ? 'text-white' : 'text-typography-400'
             }`}
           >
             Watchlist ({watchlist.length})
@@ -57,7 +57,7 @@ export default function WatchlistScreen() {
           />
           <Text
             className={`text-sm font-bold ${
-              tab === 'favorites' ? 'text-typography-50' : 'text-typography-400'
+              tab === 'favorites' ? 'text-white' : 'text-typography-400'
             }`}
           >
             Favorites ({favorites.length})

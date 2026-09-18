@@ -20,10 +20,12 @@ import {
   Center,
 } from '../../src/components/ui/gluestack';
 import { Icons } from '../../src/components/Icons';
+import { useTheme } from '../../src/theme/ThemeContext';
 
 export default function PersonDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const personId = Number(id);
+  const { resolved } = useTheme();
   const { data: person, isLoading } = usePersonDetail(personId);
 
   if (isLoading) return <LoadingSpinner />;
@@ -60,7 +62,7 @@ export default function PersonDetailScreen() {
         onPress={() => router.back()}
         className="absolute top-12 left-4 z-10 bg-background-900/80 rounded-full p-2"
       >
-        <Icons.ChevronLeft size={20} color="#f5f5f5" />
+        <Icons.ChevronLeft size={20} color={resolved === 'dark' ? '#f5f5f5' : '#18181b'} />
       </Pressable>
 
       {/* Profile Image + Info */}
@@ -94,7 +96,7 @@ export default function PersonDetailScreen() {
         <HStack className="mt-4 bg-background-800 rounded-2xl px-6 py-3">
           <Center className="mx-4">
             <HStack className="items-center gap-1">
-              <Icons.Star size={14} color="#ec4899" />
+              <Icons.Star size={14} color="#ef4444" />
               <Text className="text-typography-50 text-lg font-bold">
                 {formatNumber(person.popularity)}
               </Text>

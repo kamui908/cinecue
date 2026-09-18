@@ -1,6 +1,8 @@
 import React from 'react';
-import { RefreshControl, ScrollView } from 'react-native';
-import { Box, Text, Spinner } from '../../src/components/ui/gluestack';
+import { RefreshControl, ScrollView, useWindowDimensions } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Box, Text, Pressable, Image, HStack, VStack } from '../../src/components/ui/gluestack';
+import { Link } from 'expo-router';
 import { useTrendingMovies, useTrendingTV, useNowPlayingMovies, usePopularMovies, useTrendingPeople } from '../../src/hooks/useTMDB';
 import { MovieCard } from '../../src/components/MovieCard';
 import { TVCard } from '../../src/components/TVCard';
@@ -8,9 +10,14 @@ import { PersonCard } from '../../src/components/PersonCard';
 import { Section, HorizontalList, LoadingSpinner } from '../../src/components/UI';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icons } from '../../src/components/Icons';
+import { Images } from '../../src/api/tmdb';
+import { useTheme } from '../../src/theme/ThemeContext';
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
+  const { width: windowWidth } = useWindowDimensions();
+  const { resolved, toggle } = useTheme();
+  const pageBg = resolved === 'dark' ? '#121212' : '#F7F7F7';
   const trendingMovies = useTrendingMovies('week');
   const trendingTV = useTrendingTV('week');
   const nowPlaying = useNowPlayingMovies();
@@ -19,6 +26,20 @@ export default function HomeScreen() {
 
   const isLoading = trendingMovies.isLoading && trendingTV.isLoading;
   const [refreshing, setRefreshing] = React.useState(false);
+
+  const heroItems = (trendingMovies.data?.results || []).slice(0, 8);
+  const [heroIndex, setHeroIndex] = React.useState(0);
+  const heroRef = React.useRef<ScrollView>(null);
+
+  React.useEffect(() => {
+    if (heroItems.length <= 1) return;
+    const timer = setTimeout(() => {
+      const next = (heroIndex + 1) % heroItems.length;
+      heroRef.current?.scrollTo({ x: next * windowWidth, animated: true });
+      setHeroIndex(next);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [heroIndex, heroItems.length, windowWidth]);
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
@@ -40,29 +61,137 @@ export default function HomeScreen() {
       <RefreshControl
         refreshing={refreshing}
         onRefresh={onRefresh}
-        tintColor="#ec4899"
-        colors={['#ec4899']}
+        tintColor="#ef4444"
+        colors={['#ef4444']}
       />
 
       {/* Header */}
-      <Box className="px-4 mb-6">
-        <Text className="text-typography-400 text-sm">Welcome back</Text>
-        <Text className="text-typography-50 text-2xl font-bold mt-1">
-          Cine<Text className="text-primary-500">Cue</Text>
-        </Text>
+      <Box className="px-4 mb-6 flex-row items-center justify-between">
+        <Box>
+          <Text className="text-typography-400 text-[11px] uppercase tracking-[3px]">
+            Welcome back
+          </Text>
+          <Text className="text-typography-50 font-heading text-4xl mt-1">
+            Cine<Text className="text-primary-500 font-heading">Cue</Text>
+          </Text>
+        </Box>
+        <Pressable
+          onPress={toggle}
+          className="w-10 h-10 rounded-full bg-background-800 items-center justify-center"
+          hitSlop={8}
+          accessibilityLabel="Toggle theme"
+        >
+          {resolved === 'dark' ? (
+            <Icons.Sun size={20} color="#fbbf24" />
+          ) : (
+            <Icons.Moon size={20} color="#52525b" />
+          )}
+        </Pressable>
       </Box>
 
       {isLoading ? (
         <LoadingSpinner />
       ) : (
         <>
+          {/* Hero */}
+          {heroItems.length > 0 && (
+            <Box className="relative mb-8">
+              <ScrollView
+                ref={heroRef}
+                horizontal
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+                snapToInterval={windowWidth}
+                decelerationRate="fast"
+                onScroll={(e) => {
+                  const idx = Math.round(e.nativeEvent.contentOffset.x / windowWidth);
+                  if (idx !== heroIndex && idx >= 0 && idx < heroItems.length) {
+                    setHeroIndex(idx);
+                  }
+                }}
+                scrollEventThrottle={200}
+              >
+                {heroItems.map((movie) => (
+                  <Link key={movie.id} href={`/movie/${movie.id}`} asChild>
+                    <Pressable
+                      className="relative h-[560px] overflow-hidden bg-background-800"
+                      style={{ width: windowWidth }}
+                    >
+                      {movie.backdrop_path ? (
+                        <Image
+                          source={{ uri: Images.backdrop(movie.backdrop_path, 'w1280') }}
+                          className="absolute inset-0 w-full h-full"
+                          resizeMode="cover"
+                          alt={movie.title}
+                        />
+                      ) : null}
+                      <Box className="absolute inset-0 bg-black/25" />
+                      <LinearGradient
+                        colors={['transparent', pageBg]}
+                        locations={[0.25, 1]}
+                        style={{
+                          position: 'absolute',
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          height: 420,
+                        }}
+                      />
+                      <VStack className="absolute bottom-0 left-0 right-0 px-5 pb-6">
+                        <Text className="text-primary-500 text-xs font-bold uppercase tracking-widest mb-2">
+                          Featured
+                        </Text>
+                        <Text className="text-typography-0 text-4xl font-bold leading-tight">
+                          {movie.title}
+                        </Text>
+                        <HStack className="items-center gap-3 mt-2">
+                          <Text className="text-typography-300 text-sm font-semibold">
+                            {movie.release_date ? new Date(movie.release_date).getFullYear() : '—'}
+                          </Text>
+                          <HStack className="items-center gap-1">
+                            <Icons.Star size={13} color="#ef4444" fill="#ef4444" />
+                            <Text className="text-typography-300 text-sm">
+                              {movie.vote_average?.toFixed(1)}
+                            </Text>
+                          </HStack>
+                        </HStack>
+                        <Text className="text-typography-400 text-sm mt-2" numberOfLines={3}>
+                          {movie.overview}
+                        </Text>
+                        <HStack className="items-center gap-3 mt-4">
+                          <HStack className="items-center gap-1.5 bg-primary-500 rounded-lg px-4 py-2.5">
+                            <Icons.Play size={16} color="#ffffff" fill="#ffffff" />
+                            <Text className="text-white text-sm font-bold">Watch Now</Text>
+                          </HStack>
+                          <HStack className="items-center gap-1.5 bg-background-800 rounded-lg px-4 py-2.5">
+                            <Text className="text-typography-0 text-sm font-bold">More Info</Text>
+                          </HStack>
+                        </HStack>
+                      </VStack>
+                    </Pressable>
+                  </Link>
+                ))}
+              </ScrollView>
+
+              {/* Dots */}
+              <HStack className="absolute top-3 right-4 gap-1.5 bg-black/30 rounded-full px-2.5 py-1.5">
+                {heroItems.map((m, i) => (
+                  <Box
+                    key={m.id}
+                    className={`h-1.5 rounded-full ${i === heroIndex ? 'w-5 bg-primary-500' : 'w-1.5 bg-typography-600'}`}
+                  />
+                ))}
+              </HStack>
+            </Box>
+          )}
+
           {/* Trending Movies */}
           <Section
             title="Trending Movies"
             subtitle="This week"
             action={
               <Box className="bg-primary-500/20 rounded-full px-3 py-1 flex-row items-center gap-1">
-                <Icons.Zap size={12} color="#ec4899" />
+                <Icons.Zap size={12} color="#ef4444" />
                 <Text className="text-primary-500 text-xs font-semibold">Hot</Text>
               </Box>
             }

@@ -58,7 +58,7 @@ export const Spinner = React.forwardRef<any, any>(
     <ActivityIndicator
       ref={ref}
       className={cn(className)}
-      color={props.color ?? '#ec4899'}
+      color={props.color ?? '#ef4444'}
       {...props}
     />
   )

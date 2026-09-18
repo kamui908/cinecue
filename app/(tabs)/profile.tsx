@@ -33,7 +33,7 @@ export default function ProfileScreen() {
       {/* Profile Header */}
       <Box className="items-center px-4 mb-8">
         <Box className="w-24 h-24 rounded-full bg-primary-500/20 items-center justify-center mb-3">
-          <Icons.Clapperboard size={32} color="#ec4899" />
+          <Icons.Clapperboard size={32} color="#ef4444" />
         </Box>
         <Text className="text-typography-50 text-xl font-bold">Movie Buff</Text>
         <Text className="text-typography-400 text-sm mt-1">CineCue Explorer</Text>
@@ -45,7 +45,7 @@ export default function ProfileScreen() {
           const StatIcon = stat.IconComponent;
           return (
             <Box key={stat.label} className="flex-1 items-center">
-              <StatIcon size={24} color="#ec4899" className="mb-1" />
+              <StatIcon size={24} color="#ef4444" className="mb-1" />
               <Text className="text-typography-50 text-xl font-bold">{stat.value}</Text>
               <Text className="text-typography-400 text-[10px] mt-1">{stat.label}</Text>
             </Box>
