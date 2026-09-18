@@ -1,11 +1,13 @@
 import React from 'react';
-import { View, Text, ScrollView, RefreshControl } from 'react-native';
+import { RefreshControl, ScrollView } from 'react-native';
+import { Box, Text, Spinner } from '../../src/components/ui/gluestack';
 import { useTrendingMovies, useTrendingTV, useNowPlayingMovies, usePopularMovies, useTrendingPeople } from '../../src/hooks/useTMDB';
 import { MovieCard } from '../../src/components/MovieCard';
 import { TVCard } from '../../src/components/TVCard';
 import { PersonCard } from '../../src/components/PersonCard';
 import { Section, HorizontalList, LoadingSpinner } from '../../src/components/UI';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Icons } from '../../src/components/Icons';
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
@@ -32,22 +34,23 @@ export default function HomeScreen() {
 
   return (
     <ScrollView
-      className="flex-1 bg-dark-950"
-      contentContainerStyle={{ paddingTop: insets.top + 16, paddingBottom: 100 }}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-          tintColor="#ec4899"
-          colors={['#ec4899']}
-        />
-      }
+      className="flex-1 bg-background-900"
+      contentContainerStyle={{ flexGrow: 1, paddingTop: insets.top + 16, paddingBottom: 100 }}
     >
+      <RefreshControl
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+        tintColor="#ec4899"
+        colors={['#ec4899']}
+      />
+
       {/* Header */}
-      <View className="px-4 mb-6">
-        <Text className="text-dark-400 text-sm">Welcome back</Text>
-        <Text className="text-white text-2xl font-bold mt-1"> Cine<Text className="text-primary-500">Cue</Text></Text>
-      </View>
+      <Box className="px-4 mb-6">
+        <Text className="text-typography-400 text-sm">Welcome back</Text>
+        <Text className="text-typography-50 text-2xl font-bold mt-1">
+          Cine<Text className="text-primary-500">Cue</Text>
+        </Text>
+      </Box>
 
       {isLoading ? (
         <LoadingSpinner />
@@ -58,9 +61,10 @@ export default function HomeScreen() {
             title="Trending Movies"
             subtitle="This week"
             action={
-              <View className="bg-primary-500/20 rounded-full px-3 py-1">
-                <Text className="text-primary-400 text-xs font-semibold">🔥 Hot</Text>
-              </View>
+              <Box className="bg-primary-500/20 rounded-full px-3 py-1 flex-row items-center gap-1">
+                <Icons.Zap size={12} color="#ec4899" />
+                <Text className="text-primary-500 text-xs font-semibold">Hot</Text>
+              </Box>
             }
           >
             <HorizontalList>
@@ -93,9 +97,10 @@ export default function HomeScreen() {
             title="Trending TV"
             subtitle="This week"
             action={
-              <View className="bg-accent-cyan/20 rounded-full px-3 py-1">
-                <Text className="text-accent-cyan text-xs font-semibold">📺 Trending</Text>
-              </View>
+              <Box className="bg-info-500/20 rounded-full px-3 py-1 flex-row items-center gap-1">
+                <Icons.TrendingUp size={12} color="#22d3ee" />
+                <Text className="text-info-500 text-xs font-semibold">Trending</Text>
+              </Box>
             }
           >
             <HorizontalList>

@@ -45,15 +45,15 @@ export function formatNumber(num: number): string {
 }
 
 export function getRatingColor(rating: number): string {
-  if (rating >= 7.5) return 'text-accent-emerald';
-  if (rating >= 5) return 'text-accent-gold';
-  return 'text-accent-rose';
+  if (rating >= 7.5) return 'text-success-500';
+  if (rating >= 5) return 'text-warning-500';
+  return 'text-error-500';
 }
 
 export function getRatingBgColor(rating: number): string {
-  if (rating >= 7.5) return 'bg-accent-emerald/20';
-  if (rating >= 5) return 'bg-accent-gold/20';
-  return 'bg-accent-rose/20';
+  if (rating >= 7.5) return 'bg-success-500/20';
+  if (rating >= 5) return 'bg-warning-500/20';
+  return 'bg-error-500/20';
 }
 
 export function truncate(str: string, length: number): string {

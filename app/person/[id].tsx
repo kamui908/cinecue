@@ -1,20 +1,30 @@
 import React from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import { usePersonDetail } from '../../src/hooks/useTMDB';
 import { Images } from '../../src/api/tmdb';
 import { MovieCard } from '../../src/components/MovieCard';
 import { TVCard } from '../../src/components/TVCard';
 import { Section, HorizontalList, LoadingSpinner } from '../../src/components/UI';
+import { ScrollView } from 'react-native';
 import { formatDate, formatNumber } from '../../src/utils/format';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MovieCast, TVCast } from '../../src/types/tmdb';
+import {
+  Box,
+  Text,
+  HStack,
+  VStack,
+  Pressable,
+  Image,
+  Badge,
+  Divider,
+  Center,
+} from '../../src/components/ui/gluestack';
+import { Icons } from '../../src/components/Icons';
 
 export default function PersonDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const personId = Number(id);
   const { data: person, isLoading } = usePersonDetail(personId);
-  const insets = useSafeAreaInsets();
 
   if (isLoading) return <LoadingSpinner />;
   if (!person) return null;
@@ -25,101 +35,140 @@ export default function PersonDetailScreen() {
     .slice(0, 15);
 
   const tvCredits = person.combined_credits.cast
-    .filter((c): c is TVCast => 'name' in c && 'character' in c && !('title' in c))
+    .filter(
+      (c): c is TVCast =>
+        'name' in c && 'character' in c && !('title' in c)
+    )
     .sort((a, b) => (b.vote_average || 0) - (a.vote_average || 0))
     .slice(0, 15);
 
   const crewCredits = person.combined_credits.crew
-    .filter(c => c.department === 'Directing' || c.department === 'Writing')
+    .filter(
+      (c) =>
+        c.department === 'Directing' || c.department === 'Writing'
+    )
     .sort((a, b) => (b.vote_average || 0) - (a.vote_average || 0))
     .slice(0, 10);
 
   return (
     <ScrollView
-      className="flex-1 bg-dark-950"
+      className="flex-1 bg-background-950"
       contentContainerStyle={{ paddingBottom: 100 }}
     >
       {/* Back Button */}
-      <TouchableOpacity
+      <Pressable
         onPress={() => router.back()}
-        className="absolute top-12 left-4 z-10 bg-dark-900/80 rounded-full p-2"
+        className="absolute top-12 left-4 z-10 bg-background-900/80 rounded-full p-2"
       >
-        <Text className="text-white text-lg">←</Text>
-      </TouchableOpacity>
+        <Icons.ChevronLeft size={20} color="#f5f5f5" />
+      </Pressable>
 
       {/* Profile Image + Info */}
-      <View className="items-center px-4 pt-16 pb-6">
-        <View className="w-36 h-36 rounded-full overflow-hidden bg-dark-800 mb-4">
+      <Center className="px-4 pt-16 pb-6">
+        <Box className="w-36 h-36 rounded-full overflow-hidden bg-background-800 mb-4">
           {person.profile_path ? (
             <Image
-              source={{ uri: Images.profile(person.profile_path, 'h632') }}
+              source={{
+                uri: Images.profile(person.profile_path, 'h632'),
+              }}
               className="w-full h-full"
               resizeMode="cover"
+              alt={person.name}
             />
           ) : (
-            <View className="w-full h-full bg-dark-700 items-center justify-center">
-              <Text className="text-dark-400 text-4xl font-bold">
+            <Center className="w-full h-full bg-background-700">
+              <Text className="text-typography-400 text-4xl font-bold">
                 {person.name.charAt(0)}
               </Text>
-            </View>
+            </Center>
           )}
-        </View>
-        <Text className="text-white text-2xl font-bold text-center">{person.name}</Text>
-        <Text className="text-dark-400 text-sm mt-1">{person.known_for_department}</Text>
+        </Box>
+        <Text className="text-typography-50 text-2xl font-bold text-center">
+          {person.name}
+        </Text>
+        <Text className="text-typography-400 text-sm mt-1">
+          {person.known_for_department}
+        </Text>
 
         {/* Stats */}
-        <View className="flex-row mt-4 bg-dark-800 rounded-2xl px-6 py-3">
-          <View className="items-center mx-4">
-            <Text className="text-white text-lg font-bold">★ {formatNumber(person.popularity)}</Text>
-            <Text className="text-dark-400 text-[10px]">Popularity</Text>
-          </View>
+        <HStack className="mt-4 bg-background-800 rounded-2xl px-6 py-3">
+          <Center className="mx-4">
+            <HStack className="items-center gap-1">
+              <Icons.Star size={14} color="#ec4899" />
+              <Text className="text-typography-50 text-lg font-bold">
+                {formatNumber(person.popularity)}
+              </Text>
+            </HStack>
+            <Text className="text-typography-400 text-[10px]">
+              Popularity
+            </Text>
+          </Center>
           {person.birthday && (
-            <View className="items-center mx-4">
-              <Text className="text-white text-sm font-semibold">{formatDate(person.birthday, 'MMM D, YYYY')}</Text>
-              <Text className="text-dark-400 text-[10px]">Born</Text>
-            </View>
+            <Center className="mx-4">
+              <Text className="text-typography-50 text-sm font-semibold">
+                {formatDate(person.birthday, 'MMM D, YYYY')}
+              </Text>
+              <Text className="text-typography-400 text-[10px]">Born</Text>
+            </Center>
           )}
           {person.deathday && (
-            <View className="items-center mx-4">
-              <Text className="text-white text-sm font-semibold">{formatDate(person.deathday, 'MMM D, YYYY')}</Text>
-              <Text className="text-dark-400 text-[10px]">Died</Text>
-            </View>
+            <Center className="mx-4">
+              <Text className="text-typography-50 text-sm font-semibold">
+                {formatDate(person.deathday, 'MMM D, YYYY')}
+              </Text>
+              <Text className="text-typography-400 text-[10px]">Died</Text>
+            </Center>
           )}
-        </View>
-      </View>
+        </HStack>
+      </Center>
 
       {/* Biography */}
       {person.biography ? (
-        <View className="px-4 mb-6">
-          <Text className="text-white text-base font-bold mb-2">Biography</Text>
-          <Text className="text-dark-300 text-sm leading-5">{person.biography}</Text>
-        </View>
+        <VStack className="px-4 mb-6">
+          <Text className="text-typography-50 text-base font-bold mb-2">
+            Biography
+          </Text>
+          <Text className="text-typography-300 text-sm leading-5">
+            {person.biography}
+          </Text>
+        </VStack>
       ) : null}
 
       {/* Place of Birth */}
       {person.place_of_birth && (
-        <View className="px-4 mb-6">
-          <Text className="text-white text-sm font-semibold">📍 {person.place_of_birth}</Text>
-        </View>
+        <HStack className="px-4 mb-6 items-center gap-2">
+          <Icons.MapPin size={14} color="#8c8c8c" />
+          <Text className="text-typography-50 text-sm font-semibold">
+            {person.place_of_birth}
+          </Text>
+        </HStack>
       )}
 
       {/* Also Known As */}
       {person.also_known_as.length > 0 && (
-        <View className="px-4 mb-6">
-          <Text className="text-white text-sm font-bold mb-2">Also Known As</Text>
-          <View className="flex-row flex-wrap gap-2">
+        <VStack className="px-4 mb-6">
+          <Text className="text-typography-50 text-sm font-bold mb-2">
+            Also Known As
+          </Text>
+          <HStack className="flex-wrap gap-2">
             {person.also_known_as.map((name, i) => (
-              <View key={i} className="bg-dark-800 rounded-full px-3 py-1">
-                <Text className="text-dark-300 text-xs">{name}</Text>
-              </View>
+              <Badge
+                key={i}
+                className="bg-background-800 rounded-full px-3 py-1"
+              >
+                <Text className="text-typography-300 text-xs">{name}</Text>
+              </Badge>
             ))}
-          </View>
-        </View>
+          </HStack>
+        </VStack>
       )}
 
       {/* Acting Credits */}
       {movieCredits.length > 0 && (
-        <Section title="Acting" subtitle={`${movieCredits.length} movies`}>
+        <Section
+          title="Acting"
+          subtitle={`${movieCredits.length} movies`}
+        >
           <HorizontalList>
             {movieCredits.map((credit) => (
               <MovieCard
@@ -148,7 +197,10 @@ export default function PersonDetailScreen() {
 
       {/* TV Credits */}
       {tvCredits.length > 0 && (
-        <Section title="TV Appearances" subtitle={`${tvCredits.length} shows`}>
+        <Section
+          title="TV Appearances"
+          subtitle={`${tvCredits.length} shows`}
+        >
           <HorizontalList>
             {tvCredits.map((credit) => (
               <TVCard
@@ -179,16 +231,26 @@ export default function PersonDetailScreen() {
         <Section title="Crew" subtitle="Behind the camera">
           <HorizontalList>
             {crewCredits.map((credit, i) => (
-              <View key={`${credit.id}-${i}`} className="w-[200px] mr-3 bg-dark-800 rounded-xl p-3">
-                <Text className="text-white text-sm font-semibold" numberOfLines={1}>
+              <Box
+                key={`${credit.id}-${i}`}
+                className="w-[200px] mr-3 bg-background-800 rounded-xl p-3"
+              >
+                <Text
+                  className="text-typography-50 text-sm font-semibold"
+                  numberOfLines={1}
+                >
                   {(credit as any).title || (credit as any).name}
                 </Text>
-                <Text className="text-primary-400 text-xs mt-1">{credit.job}</Text>
-                <View className="flex-row items-center mt-2">
-                  <Text className="text-accent-gold text-xs">★</Text>
-                  <Text className="text-white text-xs ml-1">{credit.vote_average.toFixed(1)}</Text>
-                </View>
-              </View>
+                <Text className="text-primary-400 text-xs mt-1">
+                  {credit.job}
+                </Text>
+                <HStack className="items-center mt-2">
+                  <Icons.Star size={12} color="#f59e0b" />
+                  <Text className="text-typography-50 text-xs ml-1">
+                    {credit.vote_average.toFixed(1)}
+                  </Text>
+                </HStack>
+              </Box>
             ))}
           </HorizontalList>
         </Section>

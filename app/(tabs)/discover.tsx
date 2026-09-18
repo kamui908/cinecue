@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { ScrollView } from 'react-native';
+import { Box, Text, Pressable } from '../../src/components/ui/gluestack';
 import { useTrendingMovies, useTrendingTV, usePopularMovies, useTopRatedMovies, useUpcomingMovies, usePopularTV, useAiringTodayTV, useTopRatedTV, useMovieGenres, useTVGenres } from '../../src/hooks/useTMDB';
 import { MovieCard } from '../../src/components/MovieCard';
 import { TVCard } from '../../src/components/TVCard';
 import { Section, HorizontalList, GenreTag, LoadingSpinner, EmptyState } from '../../src/components/UI';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Icons } from '../../src/components/Icons';
 
 type TabType = 'movies' | 'tv';
 type CategoryType = 'trending' | 'popular' | 'top_rated' | 'upcoming' | 'genres';
@@ -26,25 +28,25 @@ export default function DiscoverScreen() {
   const airingTodayTV = useAiringTodayTV();
   const tvGenres = useTVGenres();
 
-  const tabs: { key: TabType; label: string; icon: string }[] = [
-    { key: 'movies', label: 'Movies', icon: '🎬' },
-    { key: 'tv', label: 'TV Shows', icon: '📺' },
+  const tabs: { key: TabType; label: string; IconComponent: React.ComponentType<any> }[] = [
+    { key: 'movies', label: 'Movies', IconComponent: Icons.Film },
+    { key: 'tv', label: 'TV Shows', IconComponent: Icons.Tv },
   ];
 
-  const movieCategories: { key: CategoryType; label: string }[] = [
-    { key: 'trending', label: '🔥 Trending' },
-    { key: 'popular', label: '⭐ Popular' },
-    { key: 'top_rated', label: '🏆 Top Rated' },
-    { key: 'upcoming', label: '📅 Upcoming' },
-    { key: 'genres', label: '🎭 Genres' },
+  const movieCategories: { key: CategoryType; label: string; IconComponent?: React.ComponentType<any> }[] = [
+    { key: 'trending', label: 'Trending', IconComponent: Icons.TrendingUp },
+    { key: 'popular', label: 'Popular', IconComponent: Icons.Star },
+    { key: 'top_rated', label: 'Top Rated', IconComponent: Icons.Award },
+    { key: 'upcoming', label: 'Upcoming', IconComponent: Icons.Calendar },
+    { key: 'genres', label: 'Genres', IconComponent: Icons.Sparkles },
   ];
 
-  const tvCategories: { key: CategoryType; label: string }[] = [
-    { key: 'trending', label: '🔥 Trending' },
-    { key: 'popular', label: '⭐ Popular' },
-    { key: 'top_rated', label: '🏆 Top Rated' },
-    { key: 'upcoming', label: '📡 Airing Today' },
-    { key: 'genres', label: '🎭 Genres' },
+  const tvCategories: { key: CategoryType; label: string; IconComponent?: React.ComponentType<any> }[] = [
+    { key: 'trending', label: 'Trending', IconComponent: Icons.TrendingUp },
+    { key: 'popular', label: 'Popular', IconComponent: Icons.Star },
+    { key: 'top_rated', label: 'Top Rated', IconComponent: Icons.Award },
+    { key: 'upcoming', label: 'Airing Today', IconComponent: Icons.Calendar },
+    { key: 'genres', label: 'Genres', IconComponent: Icons.Sparkles },
   ];
 
   const categories = activeTab === 'movies' ? movieCategories : tvCategories;
@@ -86,11 +88,11 @@ export default function DiscoverScreen() {
           );
         case 'genres':
           return (
-            <View className="px-4 flex-row flex-wrap">
+            <Box className="px-4 flex-row flex-wrap">
               {(movieGenres.data?.genres || []).map((g) => (
                 <GenreTag key={g.id} name={g.name} />
               ))}
-            </View>
+            </Box>
           );
       }
     } else {
@@ -129,11 +131,11 @@ export default function DiscoverScreen() {
           );
         case 'genres':
           return (
-            <View className="px-4 flex-row flex-wrap">
+            <Box className="px-4 flex-row flex-wrap">
               {(tvGenres.data?.genres || []).map((g) => (
                 <GenreTag key={g.id} name={g.name} />
               ))}
-            </View>
+            </Box>
           );
       }
     }
@@ -141,34 +143,41 @@ export default function DiscoverScreen() {
 
   return (
     <ScrollView
-      className="flex-1 bg-dark-950"
+      className="flex-1 bg-background-900"
       contentContainerStyle={{ paddingTop: insets.top + 16, paddingBottom: 100 }}
     >
-      <Text className="text-white text-2xl font-bold px-4 mb-4">Discover</Text>
+      <Text className="text-typography-50 text-2xl font-bold px-4 mb-4">Discover</Text>
 
       {/* Tab Selector */}
-      <View className="flex-row mx-4 mb-4 bg-dark-800 rounded-xl p-1">
-        {tabs.map((tab) => (
-          <TouchableOpacity
-            key={tab.key}
-            onPress={() => {
-              setActiveTab(tab.key);
-              setActiveCategory('trending');
-            }}
-            className={`flex-1 py-3 rounded-lg items-center ${
-              activeTab === tab.key ? 'bg-primary-500' : ''
-            }`}
-          >
-            <Text
-              className={`text-sm font-bold ${
-                activeTab === tab.key ? 'text-white' : 'text-dark-400'
+      <Box className="flex-row mx-4 mb-4 bg-background-800 rounded-xl p-1">
+        {tabs.map((tab) => {
+          const TabIcon = tab.IconComponent;
+          return (
+            <Pressable
+              key={tab.key}
+              onPress={() => {
+                setActiveTab(tab.key);
+                setActiveCategory('trending');
+              }}
+              className={`flex-1 py-3 rounded-lg items-center flex-row justify-center gap-2 ${
+                activeTab === tab.key ? 'bg-primary-500' : ''
               }`}
             >
-              {tab.icon} {tab.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+              <TabIcon
+                size={16}
+                color={activeTab === tab.key ? '#ffffff' : '#64748b'}
+              />
+              <Text
+                className={`text-sm font-bold ${
+                  activeTab === tab.key ? 'text-typography-50' : 'text-typography-400'
+                }`}
+              >
+                {tab.label}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </Box>
 
       {/* Category Chips */}
       <ScrollView
@@ -177,23 +186,32 @@ export default function DiscoverScreen() {
         contentContainerStyle={{ paddingHorizontal: 16 }}
         className="mb-4"
       >
-        {categories.map((cat) => (
-          <TouchableOpacity
-            key={cat.key}
-            onPress={() => setActiveCategory(cat.key)}
-            className={`mr-2 px-4 py-2 rounded-full ${
-              activeCategory === cat.key ? 'bg-dark-700' : 'bg-dark-800/50'
-            }`}
-          >
-            <Text
-              className={`text-xs font-semibold ${
-                activeCategory === cat.key ? 'text-white' : 'text-dark-500'
+        {categories.map((cat) => {
+          const CatIcon = cat.IconComponent;
+          return (
+            <Pressable
+              key={cat.key}
+              onPress={() => setActiveCategory(cat.key)}
+              className={`mr-2 px-4 py-2 rounded-full flex-row items-center gap-1 ${
+                activeCategory === cat.key ? 'bg-background-800' : 'bg-background-800/50'
               }`}
             >
-              {cat.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
+              {CatIcon && (
+                <CatIcon
+                  size={12}
+                  color={activeCategory === cat.key ? '#ffffff' : '#64748b'}
+                />
+              )}
+              <Text
+                className={`text-xs font-semibold ${
+                  activeCategory === cat.key ? 'text-typography-50' : 'text-typography-400'
+                }`}
+              >
+                {cat.label}
+              </Text>
+            </Pressable>
+          );
+        })}
       </ScrollView>
 
       {/* Content */}

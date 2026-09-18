@@ -1,6 +1,17 @@
 import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
 import { ReactNode } from 'react';
+import { ScrollView } from 'react-native';
+import {
+  Box,
+  Text,
+  HStack,
+  VStack,
+  Pressable,
+  Center,
+  Spinner,
+  Badge,
+} from './ui/gluestack';
+import { Icons } from './Icons';
 
 interface SectionProps {
   title: string;
@@ -11,16 +22,16 @@ interface SectionProps {
 
 export function Section({ title, subtitle, action, children }: SectionProps) {
   return (
-    <View className="mb-6">
-      <View className="flex-row items-center justify-between px-4 mb-3">
-        <View>
-          <Text className="text-white text-lg font-bold">{title}</Text>
-          {subtitle && <Text className="text-dark-400 text-xs mt-0.5">{subtitle}</Text>}
-        </View>
+    <Box className="mb-6">
+      <HStack className="items-center justify-between px-4 mb-3">
+        <Box>
+          <Text className="text-typography-50 text-lg font-bold">{title}</Text>
+          {subtitle && <Text className="text-typography-400 text-xs mt-0.5">{subtitle}</Text>}
+        </Box>
         {action}
-      </View>
+      </HStack>
       {children}
-    </View>
+    </Box>
   );
 }
 
@@ -42,55 +53,72 @@ interface RatingBadgeProps {
 }
 
 export function RatingBadge({ rating, size = 'md' }: RatingBadgeProps) {
-  const color =
-    rating >= 7.5 ? 'bg-accent-emerald' : rating >= 5 ? 'bg-accent-gold' : 'bg-accent-rose';
+  const bg =
+    rating >= 7.5
+      ? 'bg-success-500/20'
+      : rating >= 5
+        ? 'bg-warning-500/20'
+        : 'bg-error-500/20';
   const textColor =
-    rating >= 7.5 ? 'text-accent-emerald' : rating >= 5 ? 'text-accent-gold' : 'text-accent-rose';
+    rating >= 7.5
+      ? 'text-success-500'
+      : rating >= 5
+        ? 'text-warning-500'
+        : 'text-error-500';
 
   const sizeClasses = {
-    sm: 'w-8 h-8 text-[10px]',
-    md: 'w-10 h-10 text-xs',
-    lg: 'w-12 h-12 text-sm',
+    sm: 'w-8 h-8',
+    md: 'w-10 h-10',
+    lg: 'w-12 h-12',
   };
 
+  const textSize = size === 'sm' ? 'text-[10px]' : size === 'md' ? 'text-xs' : 'text-sm';
+
   return (
-    <View className={`${color}/20 rounded-full items-center justify-center ${sizeClasses[size]}`}>
-      <Text className={`${textColor} font-bold ${size === 'sm' ? 'text-[10px]' : size === 'md' ? 'text-xs' : 'text-sm'}`}>
-        ★ {rating.toFixed(1)}
-      </Text>
-    </View>
+    <Center className={`${bg} rounded-full ${sizeClasses[size]}`}>
+      <HStack className="items-center gap-1">
+        <Icons.Star size={size === 'sm' ? 10 : size === 'md' ? 12 : 14} color="currentColor" className={textColor} />
+        <Text className={`${textColor} font-bold ${textSize}`}>
+          {rating.toFixed(1)}
+        </Text>
+      </HStack>
+    </Center>
   );
 }
 
 export function GenreTag({ name }: { name: string }) {
   return (
-    <View className="bg-dark-700 rounded-full px-3 py-1 mr-2 mb-2">
-      <Text className="text-dark-300 text-xs">{name}</Text>
-    </View>
+    <Badge className="bg-background-700 rounded-full px-3 py-1 mr-2 mb-2">
+      <Text className="text-typography-400 text-xs">{name}</Text>
+    </Badge>
   );
 }
 
 interface EmptyStateProps {
-  icon?: string;
+  icon?: ReactNode;
   title: string;
   message: string;
 }
 
-export function EmptyState({ icon = '🎬', title, message }: EmptyStateProps) {
+export function EmptyState({ icon, title, message }: EmptyStateProps) {
   return (
-    <View className="items-center justify-center py-16 px-8">
-      <Text className="text-4xl mb-4">{icon}</Text>
-      <Text className="text-white text-lg font-bold text-center">{title}</Text>
-      <Text className="text-dark-400 text-sm text-center mt-2">{message}</Text>
-    </View>
+    <Center className="py-16 px-8">
+      {icon ? (
+        <Box className="mb-4">{icon}</Box>
+      ) : (
+        <Icons.Clapperboard size={48} className="text-typography-400 mb-4" />
+      )}
+      <Text className="text-typography-50 text-lg font-bold text-center">{title}</Text>
+      <Text className="text-typography-400 text-sm text-center mt-2">{message}</Text>
+    </Center>
   );
 }
 
 export function LoadingSpinner() {
   return (
-    <View className="items-center justify-center py-8">
-      <View className="w-8 h-8 border-2 border-dark-600 border-t-primary-500 rounded-full" />
-    </View>
+    <Center className="py-8">
+      <Spinner size="large" className="text-primary-500" />
+    </Center>
   );
 }
 
@@ -101,9 +129,9 @@ interface StatItemProps {
 
 export function StatItem({ label, value }: StatItemProps) {
   return (
-    <View className="items-center flex-1">
-      <Text className="text-white text-lg font-bold">{value}</Text>
-      <Text className="text-dark-400 text-xs mt-1">{label}</Text>
-    </View>
+    <Center className="flex-1">
+      <Text className="text-typography-50 text-lg font-bold">{value}</Text>
+      <Text className="text-typography-400 text-xs mt-1">{label}</Text>
+    </Center>
   );
 }

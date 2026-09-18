@@ -1,22 +1,27 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
-import { View, Text } from 'react-native';
+import { Box, Text } from '../../src/components/ui/gluestack';
+import { Icons } from '../../src/components/Icons';
 
 function TabIcon({ name, focused }: { name: string; focused: boolean }) {
-  const icons: Record<string, string> = {
-    home: '🏠',
-    search: '🔍',
-    discover: '🎬',
-    watchlist: '📋',
-    profile: '👤',
+  const iconMap: Record<string, React.ComponentType<any>> = {
+    home: Icons.Home,
+    search: Icons.Search,
+    discover: Icons.Compass,
+    watchlist: Icons.List,
+    profile: Icons.User,
   };
 
+  const Icon = iconMap[name] || Icons.Home;
+
   return (
-    <View className="items-center justify-center">
-      <Text className={`text-xl ${focused ? 'opacity-100' : 'opacity-50'}`}>
-        {icons[name] || '•'}
-      </Text>
-    </View>
+    <Box className="items-center justify-center">
+      <Icon
+        size={24}
+        color={focused ? '#ec4899' : '#64748b'}
+        strokeWidth={focused ? 2.5 : 2}
+      />
+    </Box>
   );
 }
 
@@ -26,8 +31,8 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: '#0f172a',
-          borderTopColor: '#1e293b',
+          backgroundColor: '#121212',
+          borderTopColor: '#414040',
           borderTopWidth: 1,
           height: 85,
           paddingTop: 8,

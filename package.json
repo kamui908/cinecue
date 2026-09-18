@@ -9,6 +9,11 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@gluestack-style/react": "^1.0.57",
+    "@gluestack-ui/nativewind-utils": "^1.0.28",
+    "@gluestack-ui/overlay": "^0.1.22",
+    "@gluestack-ui/themed": "^1.1.73",
+    "@gluestack-ui/toast": "^1.0.9",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@tanstack/react-query": "^5.84.1",
     "babel-preset-expo": "^57.0.12",
@@ -25,6 +30,7 @@
     "expo-status-bar": "~57.0.1",
     "expo-system-ui": "~57.0.4",
     "expo-web-browser": "~57.0.3",
+    "lucide-react-native": "^1.47.0",
     "nativewind": "^4.1.23",
     "query-string": "^9.5.1",
     "react": "19.2.3",

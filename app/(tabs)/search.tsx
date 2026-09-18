@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, TextInput, ScrollView, TouchableOpacity, FlatList, Keyboard } from 'react-native';
+import { Keyboard, FlatList, ScrollView } from 'react-native';
+import { Box, Text, Pressable, Input, InputField } from '../../src/components/ui/gluestack';
 import { useSearchMulti, useSearchMovies, useSearchTV } from '../../src/hooks/useTMDB';
 import { MovieCard } from '../../src/components/MovieCard';
 import { TVCard } from '../../src/components/TVCard';
@@ -7,6 +8,7 @@ import { PersonCard } from '../../src/components/PersonCard';
 import { EmptyState, LoadingSpinner } from '../../src/components/UI';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Movie, TVShow, Person } from '../../src/types/tmdb';
+import { Icons } from '../../src/components/Icons';
 
 type FilterType = 'multi' | 'movie' | 'tv' | 'person';
 
@@ -54,85 +56,85 @@ export default function SearchScreen() {
   const renderResultItem = ({ item }: { item: any }) => {
     if ('title' in item && !('name' in item && 'known_for_department' in item)) {
       return (
-        <View className="px-4 mb-2">
+        <Box className="px-4 mb-2">
           <MovieCard movie={item as Movie} variant="compact" />
-        </View>
+        </Box>
       );
     }
     if ('name' in item && 'known_for_department' in item) {
       return (
-        <View className="px-4 mb-2">
+        <Box className="px-4 mb-2">
           <PersonCard person={item as Person} />
-        </View>
+        </Box>
       );
     }
     if ('name' in item) {
       return (
-        <View className="px-4 mb-2">
+        <Box className="px-4 mb-2">
           <TVCard show={item as TVShow} variant="compact" />
-        </View>
+        </Box>
       );
     }
     return null;
   };
 
   return (
-    <View className="flex-1 bg-dark-950" style={{ paddingTop: insets.top }}>
+    <Box className="flex-1 bg-background-900" style={{ paddingTop: insets.top }}>
       {/* Search Header */}
-      <View className="px-4 pb-3">
-        <Text className="text-white text-2xl font-bold mb-3">Search</Text>
-        <View className="flex-row items-center bg-dark-800 rounded-xl px-4 py-3">
-          <Text className="text-dark-400 text-lg mr-2">🔍</Text>
-          <TextInput
-            className="flex-1 text-white text-base"
-            placeholder="Search movies, TV shows, people..."
-            placeholderTextColor="#64748b"
-            value={query}
-            onChangeText={setQuery}
-            returnKeyType="search"
-            onSubmitEditing={() => Keyboard.dismiss()}
-          />
+      <Box className="px-4 pb-3">
+        <Text className="text-typography-50 text-2xl font-bold mb-3">Search</Text>
+        <Box className="flex-row items-center bg-background-800 rounded-xl px-4 py-3">
+          <Icons.Search size={20} color="#64748b" className="mr-2" />
+          <Input className="flex-1 bg-transparent border-0">
+            <InputField
+              placeholder="Search movies, TV shows, people..."
+              placeholderTextColor="#64748b"
+              value={query}
+              onChangeText={setQuery}
+              returnKeyType="search"
+              onSubmitEditing={() => Keyboard.dismiss()}
+              className="text-typography-50"
+            />
+          </Input>
           {query.length > 0 && (
-            <TouchableOpacity onPress={handleClear}>
-              <Text className="text-dark-400 text-lg ml-2">✕</Text>
-            </TouchableOpacity>
+            <Pressable onPress={handleClear} className="ml-2">
+              <Icons.X size={20} color="#64748b" />
+            </Pressable>
           )}
-        </View>
+        </Box>
 
         {/* Filter Chips */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mt-3">
           {filters.map((f) => (
-            <TouchableOpacity
+            <Pressable
               key={f.key}
               onPress={() => setFilter(f.key)}
               className={`mr-2 px-4 py-2 rounded-full ${
-                filter === f.key ? 'bg-primary-500' : 'bg-dark-800'
+                filter === f.key ? 'bg-primary-500' : 'bg-background-800'
               }`}
             >
               <Text
                 className={`text-sm font-semibold ${
-                  filter === f.key ? 'text-white' : 'text-dark-400'
+                  filter === f.key ? 'text-typography-50' : 'text-typography-400'
                 }`}
               >
                 {f.label}
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           ))}
         </ScrollView>
-      </View>
+      </Box>
 
       {/* Results */}
       {isLoading ? (
         <LoadingSpinner />
       ) : !debouncedQuery ? (
         <EmptyState
-          icon="🔍"
           title="Search CineCue"
           message="Find your favorite movies, TV shows, and celebrities"
         />
       ) : results.length === 0 ? (
         <EmptyState
-          icon="😅"
           title="No results found"
           message={`No results for "${debouncedQuery}"`}
         />
@@ -146,6 +148,6 @@ export default function SearchScreen() {
           onScrollBeginDrag={() => Keyboard.dismiss()}
         />
       )}
-    </View>
+    </Box>
   );
 }
