@@ -203,18 +203,18 @@ export default function MovieDetailScreen() {
         ) : null}
 
         {/* Stats */}
-        <HStack className="mt-6 bg-background-800 rounded-2xl p-4">
+        <HStack className="mt-6 bg-background-800 rounded-2xl p-4 flex-wrap gap-y-4">
           {directors.length > 0 && (
-            <StatItem label="Director" value={directors[0].name} />
+            <StatItem label="Director" value={directors[0].name} className="min-w-[120px]" />
           )}
           {writers.length > 0 && (
-            <StatItem label="Writer" value={writers[0].name} />
+            <StatItem label="Writer" value={writers[0].name} className="min-w-[120px]" />
           )}
           {movie.budget > 0 && (
-            <StatItem label="Budget" value={formatCurrency(movie.budget)} />
+            <StatItem label="Budget" value={formatCurrency(movie.budget)} className="min-w-[120px]" />
           )}
           {movie.revenue > 0 && (
-            <StatItem label="Revenue" value={formatCurrency(movie.revenue)} />
+            <StatItem label="Revenue" value={formatCurrency(movie.revenue)} className="min-w-[120px]" />
           )}
         </HStack>
 

@@ -29,17 +29,18 @@ export default function HomeScreen() {
 
   const heroItems = (trendingMovies.data?.results || []).slice(0, 8);
   const [heroIndex, setHeroIndex] = React.useState(0);
+  const [heroWidth, setHeroWidth] = React.useState(windowWidth);
   const heroRef = React.useRef<ScrollView>(null);
 
   React.useEffect(() => {
     if (heroItems.length <= 1) return;
     const timer = setTimeout(() => {
       const next = (heroIndex + 1) % heroItems.length;
-      heroRef.current?.scrollTo({ x: next * windowWidth, animated: true });
+      heroRef.current?.scrollTo({ x: next * heroWidth, animated: true });
       setHeroIndex(next);
     }, 5000);
     return () => clearTimeout(timer);
-  }, [heroIndex, heroItems.length, windowWidth]);
+  }, [heroIndex, heroItems.length, heroWidth]);
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
@@ -95,16 +96,24 @@ export default function HomeScreen() {
         <>
           {/* Hero */}
           {heroItems.length > 0 && (
-            <Box className="relative mb-8">
+            <Box
+              className="relative mb-8"
+              onLayout={(e: any) => {
+                const w = e.nativeEvent.layout.width;
+                if (w > 0 && Math.abs(w - heroWidth) > 1) {
+                  setHeroWidth(w);
+                }
+              }}
+            >
               <ScrollView
                 ref={heroRef}
                 horizontal
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
-                snapToInterval={windowWidth}
+                snapToInterval={heroWidth}
                 decelerationRate="fast"
                 onScroll={(e) => {
-                  const idx = Math.round(e.nativeEvent.contentOffset.x / windowWidth);
+                  const idx = Math.round(e.nativeEvent.contentOffset.x / heroWidth);
                   if (idx !== heroIndex && idx >= 0 && idx < heroItems.length) {
                     setHeroIndex(idx);
                   }
@@ -115,7 +124,7 @@ export default function HomeScreen() {
                   <Link key={movie.id} href={`/movie/${movie.id}`} asChild>
                     <Pressable
                       className="relative h-[560px] overflow-hidden bg-background-800"
-                      style={{ width: windowWidth }}
+                      style={{ width: heroWidth }}
                     >
                       {movie.backdrop_path ? (
                         <Image

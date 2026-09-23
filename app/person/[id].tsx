@@ -190,7 +190,7 @@ export default function PersonDetailScreen() {
                   adult: false,
                   original_language: 'en',
                 }}
-                variant="backdrop"
+                variant="poster"
               />
             ))}
           </HorizontalList>
@@ -221,7 +221,7 @@ export default function PersonDetailScreen() {
                   popularity: 0,
                   original_language: 'en',
                 }}
-                variant="backdrop"
+                variant="poster"
               />
             ))}
           </HorizontalList>

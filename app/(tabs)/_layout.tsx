@@ -1,94 +1,31 @@
 import React from 'react';
+import { Platform, useWindowDimensions } from 'react-native';
 import { Tabs } from 'expo-router';
-import { Box, Text } from '../../src/components/ui/gluestack';
-import { Icons } from '../../src/components/Icons';
-import { NAV_COLORS } from '../../src/theme/palette';
-import { useTheme } from '../../src/theme/ThemeContext';
-
-function TabIcon({ name, focused }: { name: string; focused: boolean }) {
-  const { resolved } = useTheme();
-  const colors = NAV_COLORS[resolved];
-
-  const iconMap: Record<string, React.ComponentType<any>> = {
-    home: Icons.Home,
-    search: Icons.Search,
-    discover: Icons.Compass,
-    watchlist: Icons.List,
-    profile: Icons.User,
-  };
-
-  const Icon = iconMap[name] || Icons.Home;
-
-  return (
-    <Box className="items-center justify-center">
-      <Icon
-        size={24}
-        color={focused ? '#ef4444' : colors.inactive}
-        strokeWidth={focused ? 2.5 : 2}
-      />
-    </Box>
-  );
-}
+import { Box } from '../../src/components/ui/gluestack';
+import { TopMenuBar, SideRail, FloatingDock } from '../../src/components/Nav';
 
 export default function TabLayout() {
-  const { resolved } = useTheme();
-  const colors = NAV_COLORS[resolved];
+  const { width } = useWindowDimensions();
+  const isWeb = Platform.OS === 'web';
+  const showTopBar = isWeb && width >= 1100;
+  const showRail = !showTopBar && width >= 768;
 
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: {
-          backgroundColor: colors.background,
-          borderTopColor: colors.border,
-          borderTopWidth: 1,
-          height: 85,
-          paddingTop: 8,
-          paddingBottom: 28,
-        },
-        tabBarActiveTintColor: '#ef4444',
-        tabBarInactiveTintColor: colors.inactive,
-        tabBarLabelStyle: {
-          fontSize: 10,
-          fontWeight: '600',
-        },
-      }}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ focused }) => <TabIcon name="home" focused={focused} />,
-        }}
-      />
-      <Tabs.Screen
-        name="search"
-        options={{
-          title: 'Search',
-          tabBarIcon: ({ focused }) => <TabIcon name="search" focused={focused} />,
-        }}
-      />
-      <Tabs.Screen
-        name="discover"
-        options={{
-          title: 'Discover',
-          tabBarIcon: ({ focused }) => <TabIcon name="discover" focused={focused} />,
-        }}
-      />
-      <Tabs.Screen
-        name="watchlist"
-        options={{
-          title: 'Watchlist',
-          tabBarIcon: ({ focused }) => <TabIcon name="watchlist" focused={focused} />,
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: 'Profile',
-          tabBarIcon: ({ focused }) => <TabIcon name="profile" focused={focused} />,
-        }}
-      />
-    </Tabs>
+    <Box className="flex-1 bg-background-900">
+      {showTopBar && <TopMenuBar />}
+      <Box className="flex-1" style={{ flexDirection: showRail ? 'row' : 'column' }}>
+        {showRail && <SideRail />}
+        <Box className="flex-1">
+          <Tabs screenOptions={{ headerShown: false }} tabBar={() => null}>
+            <Tabs.Screen name="index" options={{ title: 'Home' }} />
+            <Tabs.Screen name="search" options={{ title: 'Search' }} />
+            <Tabs.Screen name="discover" options={{ title: 'Discover' }} />
+            <Tabs.Screen name="watchlist" options={{ title: 'Watchlist' }} />
+            <Tabs.Screen name="profile" options={{ title: 'Profile' }} />
+          </Tabs>
+          {!showTopBar && !showRail && <FloatingDock />}
+        </Box>
+      </Box>
+    </Box>
   );
 }

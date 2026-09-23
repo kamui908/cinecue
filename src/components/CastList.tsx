@@ -14,7 +14,7 @@ export function CastList({ cast }: Props) {
   return (
     <Box className="mb-6">
       <Text className="text-typography-50 text-lg font-bold px-4 mb-3">Top Billed Cast</Text>
-      <HStack className="flex-wrap px-4 gap-3">
+      <HStack className="flex-wrap justify-between px-4 gap-3">
         {displayCast.map((member) => (
           <Link href={`/person/${member.id}`} key={member.id} asChild>
             <Pressable>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { ReactNode } from 'react';
-import { ScrollView } from 'react-native';
+import { Platform, ScrollView } from 'react-native';
 import {
   Box,
   Text,
@@ -36,14 +36,61 @@ export function Section({ title, subtitle, action, children }: SectionProps) {
 }
 
 export function HorizontalList({ children }: { children: ReactNode }) {
+  const scrollRef = React.useRef<ScrollView>(null);
+  const [viewWidth, setViewWidth] = React.useState(0);
+  const [contentWidth, setContentWidth] = React.useState(0);
+  const offsetX = React.useRef(0);
+  const [, forceUpdate] = React.useReducer((x: number) => x + 1, 0);
+
+  // Desktop web has no touch swipe, so offer arrow buttons to page sideways.
+  const showArrows = Platform.OS === 'web';
+  const canGoLeft = offsetX.current > 8;
+  const canGoRight = contentWidth - viewWidth - offsetX.current > 8;
+
+  const scrollBy = (dir: 1 | -1) => {
+    const maxX = Math.max(0, contentWidth - viewWidth);
+    const next = Math.max(0, Math.min(maxX, offsetX.current + dir * viewWidth * 0.8));
+    scrollRef.current?.scrollTo({ x: next, animated: true });
+  };
+
   return (
-    <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{ paddingLeft: 16, paddingRight: 8 }}
-    >
-      {children}
-    </ScrollView>
+    <Box className="relative">
+      <ScrollView
+        ref={scrollRef}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ paddingLeft: 16, paddingRight: 8 }}
+        onLayout={(e) => setViewWidth(e.nativeEvent.layout.width)}
+        onContentSizeChange={(w) => setContentWidth(w)}
+        onScroll={(e) => {
+          offsetX.current = e.nativeEvent.contentOffset.x;
+          forceUpdate();
+        }}
+        scrollEventThrottle={100}
+      >
+        {children}
+      </ScrollView>
+      {showArrows && canGoLeft && (
+        <Pressable
+          onPress={() => scrollBy(-1)}
+          className="absolute left-2 top-1/2 -mt-5 w-10 h-10 rounded-full bg-black/50 items-center justify-center z-10"
+          accessibilityLabel="Scroll left"
+          accessibilityRole="button"
+        >
+          <Icons.ChevronLeft size={20} color="#ffffff" />
+        </Pressable>
+      )}
+      {showArrows && canGoRight && (
+        <Pressable
+          onPress={() => scrollBy(1)}
+          className="absolute right-2 top-1/2 -mt-5 w-10 h-10 rounded-full bg-black/50 items-center justify-center z-10"
+          accessibilityLabel="Scroll right"
+          accessibilityRole="button"
+        >
+          <Icons.ChevronRight size={20} color="#ffffff" />
+        </Pressable>
+      )}
+    </Box>
   );
 }
 
@@ -125,11 +172,12 @@ export function LoadingSpinner() {
 interface StatItemProps {
   label: string;
   value: string;
+  className?: string;
 }
 
-export function StatItem({ label, value }: StatItemProps) {
+export function StatItem({ label, value, className }: StatItemProps) {
   return (
-    <Center className="flex-1">
+    <Center className={`flex-1 ${className ?? ''}`}>
       <Text className="text-typography-50 text-lg font-bold">{value}</Text>
       <Text className="text-typography-400 text-xs mt-1">{label}</Text>
     </Center>
