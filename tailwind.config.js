@@ -1,9 +1,13 @@
 import gluestackPlugin from "@gluestack-ui/nativewind-utils/tailwind-plugin";
 
-// Global text-size knob: 1 = base scale, 1.5 = +50%
-const FONT_SCALE = 1.5;
-const fs = (size, lineHeight) =>
-  `${Math.round(size * FONT_SCALE)}px/${Math.round(lineHeight * FONT_SCALE)}px`;
+// Global text-size knob: 1 = intended design scale, >1 scales everything up
+// Must be [fontSize, lineHeight] arrays — a slash-joined string emits
+// invalid CSS (`font-size: 24px/36px`) which browsers silently ignore.
+const FONT_SCALE = 1;
+const fs = (size, lineHeight) => [
+  `${Math.round(size * FONT_SCALE)}px`,
+  `${Math.round(lineHeight * FONT_SCALE)}px`,
+];
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {

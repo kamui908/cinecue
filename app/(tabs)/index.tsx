@@ -85,9 +85,9 @@ export default function HomeScreen() {
       />
 
       {/* Header */}
-      <Box className="px-4 mb-6 flex-row items-center justify-between">
+      <Box className="px-4 mb-2 flex-row items-center justify-between">
         <Box>
-          <Text className="text-typography-50 font-heading text-6xl md:text-8xl">
+          <Text className="text-typography-50 font-heading text-4xl md:text-2xl">
             Cine<Text className="text-primary-500 font-heading">Cue</Text>
           </Text>
         </Box>

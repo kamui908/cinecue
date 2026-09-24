@@ -52,7 +52,7 @@ export function TopMenuBar() {
     <Box className="flex-row items-center justify-between px-6 bg-background-900 border-b border-background-800 z-10" style={{ height: 64 }}>
       <HStack className="items-center gap-8">
         <Pressable onPress={() => go('/')} accessibilityLabel="CineCue home" accessibilityRole="button">
-          <Text className="font-heading text-2xl text-typography-50">
+          <Text className="font-heading text-[16px] text-typography-50">
             Cine<Text className="text-primary-500 font-heading">Cue</Text>
           </Text>
         </Pressable>
@@ -67,7 +67,7 @@ export function TopMenuBar() {
                 accessibilityLabel={item.label}
                 accessibilityRole="button"
               >
-                <Text className={`text-sm font-semibold ${active ? 'text-primary-500' : 'text-typography-400'}`}>
+                <Text className={`text-[16px] font-semibold ${active ? 'text-primary-500' : 'text-typography-400'}`}>
                   {item.label}
                 </Text>
               </Pressable>
