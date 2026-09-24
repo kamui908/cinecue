@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Keyboard, FlatList, ScrollView } from 'react-native';
 import { Box, Text, Pressable, Input, InputField } from '../../src/components/ui/gluestack';
-import { useSearchMulti, useSearchMovies, useSearchTV, useTrendingMovies, usePopularMovies, usePopularTV } from '../../src/hooks/useTMDB';
+import { useSearchMulti, useSearchMovies, useSearchTV, useTrendingMovies, usePopularMovies, usePopularTV, useTrendingPeople } from '../../src/hooks/useTMDB';
 import { MovieCard } from '../../src/components/MovieCard';
 import { TVCard } from '../../src/components/TVCard';
 import { PersonCard } from '../../src/components/PersonCard';
@@ -23,10 +23,11 @@ export default function SearchScreen() {
   const tvSearch = useSearchTV(debouncedQuery);
 
   const trendingDay = useTrendingMovies('day');
+  const trendingPeople = useTrendingPeople('day');
   const popularMovies = usePopularMovies();
   const popularTV = usePopularTV();
   const recsLoading =
-    trendingDay.isLoading && popularMovies.isLoading && popularTV.isLoading;
+    trendingDay.isLoading && trendingPeople.isLoading && popularMovies.isLoading && popularTV.isLoading;
 
   React.useEffect(() => {
     const timer = setTimeout(() => setDebouncedQuery(query), 500);
@@ -156,6 +157,15 @@ export default function SearchScreen() {
                           <MovieCard key={`m-${m.id}`} movie={m} variant="backdrop" />
                         )
                       )}
+                  </HorizontalList>
+                </Section>
+              )}
+              {(trendingPeople.data?.results || []).length > 0 && (
+                <Section title="Trending People" subtitle="In the spotlight today">
+                  <HorizontalList>
+                    {(trendingPeople.data?.results || []).map((p) => (
+                      <PersonCard key={p.id} person={p} />
+                    ))}
                   </HorizontalList>
                 </Section>
               )}

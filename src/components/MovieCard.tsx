@@ -27,7 +27,7 @@ export function MovieCard({ movie, variant = 'poster' }: Props) {
               />
             ) : (
               <Box className="w-full h-full bg-background-700 items-center justify-center">
-                <Text className="text-typography-400 text-[16px]">No Image</Text>
+                <Text className="text-typography-400 text-sm">No Image</Text>
               </Box>
             )}
             <LinearGradient
@@ -36,14 +36,14 @@ export function MovieCard({ movie, variant = 'poster' }: Props) {
               style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 120 }}
             />
             <Box className="absolute bottom-0 left-0 right-0 p-3">
-              <Text className="text-white text-[16px] font-bold" numberOfLines={1}>
+              <Text className="text-white text-sm font-bold" numberOfLines={1}>
                 {movie.title}
               </Text>
               <HStack className="items-center gap-2 mt-1">
-                <Text className="text-white/70 text-[16px]">{formatYear(movie.release_date)}</Text>
+                <Text className="text-white/70 text-xs">{formatYear(movie.release_date)}</Text>
                 <HStack className="items-center gap-1">
                   <Icons.Star size={12} className="text-warning-500" />
-                  <Text className="text-white text-[16px] font-semibold">
+                  <Text className="text-white text-xs font-semibold">
                     {formatRating(movie.vote_average)}
                   </Text>
                 </HStack>
@@ -69,19 +69,19 @@ export function MovieCard({ movie, variant = 'poster' }: Props) {
               />
             ) : (
               <Box className="w-12 h-[72px] rounded-lg bg-background-700 items-center justify-center">
-                <Text className="text-typography-400 text-[16px]">No</Text>
+                <Text className="text-typography-400 text-2xs">No</Text>
               </Box>
             )}
             <VStack className="flex-1">
-              <Text className="text-typography-50 text-[16px] font-semibold" numberOfLines={1}>
+              <Text className="text-typography-50 text-xs font-semibold" numberOfLines={1}>
                 {movie.title}
               </Text>
-              <Text className="text-typography-400 text-[16px] mt-0.5">
+              <Text className="text-typography-400 text-2xs mt-0.5">
                 {formatYear(movie.release_date)}
               </Text>
             </VStack>
             <Box className={`px-2 py-1 rounded-full ${getRatingBgColor(movie.vote_average)}`}>
-              <Text className={`text-[16px] font-bold ${getRatingColor(movie.vote_average)}`}>
+              <Text className={`text-2xs font-bold ${getRatingColor(movie.vote_average)}`}>
                 {formatRating(movie.vote_average)}
               </Text>
             </Box>
@@ -105,22 +105,22 @@ export function MovieCard({ movie, variant = 'poster' }: Props) {
               />
             ) : (
               <Box className="w-full h-full bg-background-700 items-center justify-center">
-                <Text className="text-typography-400 text-[16px]">No Image</Text>
+                <Text className="text-typography-400 text-xs">No Image</Text>
               </Box>
             )}
             <Box className="absolute top-2 right-2">
               <HStack className="items-center gap-1 px-1.5 py-0.5 rounded-full bg-background-900/80">
                 <Icons.Star size={10} className={getRatingColor(movie.vote_average)} />
-                <Text className={`text-[16px] font-bold ${getRatingColor(movie.vote_average)}`}>
+                <Text className={`text-2xs font-bold ${getRatingColor(movie.vote_average)}`}>
                   {formatRating(movie.vote_average)}
                 </Text>
               </HStack>
             </Box>
           </Box>
-          <Text className="text-typography-50 text-[16px] font-semibold mt-2" numberOfLines={1}>
+          <Text className="text-typography-50 text-xs font-semibold mt-2" numberOfLines={1}>
             {movie.title}
           </Text>
-          <Text className="text-typography-400 text-[16px] mt-0.5">
+          <Text className="text-typography-400 text-2xs mt-0.5">
             {formatYear(movie.release_date)}
           </Text>
         </Box>

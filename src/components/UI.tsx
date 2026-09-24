@@ -1,6 +1,6 @@
 import React from 'react';
 import { ReactNode } from 'react';
-import { Platform, ScrollView } from 'react-native';
+import { Platform, ScrollView, useWindowDimensions } from 'react-native';
 import {
   Box,
   Text,
@@ -43,7 +43,9 @@ export function HorizontalList({ children }: { children: ReactNode }) {
   const [, forceUpdate] = React.useReducer((x: number) => x + 1, 0);
 
   // Desktop web has no touch swipe, so offer arrow buttons to page sideways.
-  const showArrows = Platform.OS === 'web';
+  // Hide them on small screens where swipe already works and space is tight.
+  const { width } = useWindowDimensions();
+  const showArrows = Platform.OS === 'web' && width >= 768;
   const canGoLeft = offsetX.current > 8;
   const canGoRight = contentWidth - viewWidth - offsetX.current > 8;
 

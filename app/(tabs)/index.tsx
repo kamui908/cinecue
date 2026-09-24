@@ -165,7 +165,7 @@ export default function HomeScreen() {
                         <Text className="text-primary-500 text-xs font-bold uppercase tracking-widest mb-2">
                           Featured
                         </Text>
-                        <Text className="text-typography-0 text-4xl font-bold leading-tight">
+                        <Text className="text-white text-3xl md:text-4xl font-bold leading-tight">
                           {movie.title}
                         </Text>
                         <HStack className="items-center gap-3 mt-2">
@@ -179,7 +179,12 @@ export default function HomeScreen() {
                             </Text>
                           </HStack>
                         </HStack>
-                        <Text className="text-typography-400 text-sm mt-2" numberOfLines={3}>
+                        <Text
+                          className={`${
+                            resolved === 'light' ? 'text-typography-0' : 'text-typography-400'
+                          } text-sm mt-2`}
+                          numberOfLines={3}
+                        >
                           {movie.overview}
                         </Text>
                         <HStack className="items-center gap-3 mt-4">
