@@ -35,10 +35,10 @@ export function CastList({ cast }: Props) {
                     </Box>
                   )}
                 </Box>
-                <Text className="text-typography-50 text-[11px] font-semibold mt-2 text-center" numberOfLines={1}>
+                <Text className="text-typography-50 text-xs font-semibold mt-2 text-center" numberOfLines={1}>
                   {member.name}
                 </Text>
-                <Text className="text-typography-400 text-[10px] mt-0.5 text-center" numberOfLines={2}>
+                <Text className="text-typography-400 text-2xs mt-0.5 text-center" numberOfLines={2}>
                   {member.character}
                 </Text>
               </VStack>

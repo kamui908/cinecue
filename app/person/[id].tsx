@@ -101,7 +101,7 @@ export default function PersonDetailScreen() {
                 {formatNumber(person.popularity)}
               </Text>
             </HStack>
-            <Text className="text-typography-400 text-[10px]">
+            <Text className="text-typography-400 text-2xs">
               Popularity
             </Text>
           </Center>
@@ -110,7 +110,7 @@ export default function PersonDetailScreen() {
               <Text className="text-typography-50 text-sm font-semibold">
                 {formatDate(person.birthday, 'MMM D, YYYY')}
               </Text>
-              <Text className="text-typography-400 text-[10px]">Born</Text>
+              <Text className="text-typography-400 text-2xs">Born</Text>
             </Center>
           )}
           {person.deathday && (
@@ -118,7 +118,7 @@ export default function PersonDetailScreen() {
               <Text className="text-typography-50 text-sm font-semibold">
                 {formatDate(person.deathday, 'MMM D, YYYY')}
               </Text>
-              <Text className="text-typography-400 text-[10px]">Died</Text>
+              <Text className="text-typography-400 text-2xs">Died</Text>
             </Center>
           )}
         </HStack>
@@ -130,7 +130,7 @@ export default function PersonDetailScreen() {
           <Text className="text-typography-50 text-base font-bold mb-2">
             Biography
           </Text>
-          <Text className="text-typography-300 text-sm leading-5">
+          <Text className="text-typography-300 text-sm">
             {person.biography}
           </Text>
         </VStack>

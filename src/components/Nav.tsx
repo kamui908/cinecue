@@ -75,7 +75,6 @@ export function TopMenuBar() {
           })}
         </HStack>
       </HStack>
-      <ThemeToggleButton />
     </Box>
   );
 }

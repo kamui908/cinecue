@@ -162,7 +162,7 @@ export default function MovieDetailScreen() {
                 {movie.vote_average.toFixed(1)}
               </Text>
             </HStack>
-            <Text className="text-typography-400 text-[10px]">
+            <Text className="text-typography-400 text-2xs">
               {formatNumber(movie.vote_count)} votes
             </Text>
           </Box>
@@ -196,7 +196,7 @@ export default function MovieDetailScreen() {
             <Text className="text-typography-50 text-base font-bold mb-2">
               Overview
             </Text>
-            <Text className="text-typography-300 text-sm leading-5">
+            <Text className="text-typography-300 text-sm">
               {movie.overview}
             </Text>
           </VStack>

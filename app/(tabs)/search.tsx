@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from 'react';
 import { Keyboard, FlatList, ScrollView } from 'react-native';
 import { Box, Text, Pressable, Input, InputField } from '../../src/components/ui/gluestack';
-import { useSearchMulti, useSearchMovies, useSearchTV } from '../../src/hooks/useTMDB';
+import { useSearchMulti, useSearchMovies, useSearchTV, useTrendingMovies, usePopularMovies, usePopularTV } from '../../src/hooks/useTMDB';
 import { MovieCard } from '../../src/components/MovieCard';
 import { TVCard } from '../../src/components/TVCard';
 import { PersonCard } from '../../src/components/PersonCard';
-import { EmptyState, LoadingSpinner } from '../../src/components/UI';
+import { EmptyState, LoadingSpinner, Section, HorizontalList } from '../../src/components/UI';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Movie, TVShow, Person } from '../../src/types/tmdb';
 import { Icons } from '../../src/components/Icons';
@@ -21,6 +21,12 @@ export default function SearchScreen() {
   const multiSearch = useSearchMulti(debouncedQuery);
   const movieSearch = useSearchMovies(debouncedQuery);
   const tvSearch = useSearchTV(debouncedQuery);
+
+  const trendingDay = useTrendingMovies('day');
+  const popularMovies = usePopularMovies();
+  const popularTV = usePopularTV();
+  const recsLoading =
+    trendingDay.isLoading && popularMovies.isLoading && popularTV.isLoading;
 
   React.useEffect(() => {
     const timer = setTimeout(() => setDebouncedQuery(query), 500);
@@ -129,10 +135,59 @@ export default function SearchScreen() {
       {isLoading ? (
         <LoadingSpinner />
       ) : !debouncedQuery ? (
-        <EmptyState
-          title="Search CineCue"
-          message="Find your favorite movies, TV shows, and celebrities"
-        />
+        <ScrollView
+          contentContainerStyle={{ paddingBottom: 100 }}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          {recsLoading ? (
+            <LoadingSpinner />
+          ) : (
+            <>
+              {(trendingDay.data?.results || []).length > 0 && (
+                <Section title="Trending Now" subtitle="What's hot today">
+                  <HorizontalList>
+                    {(trendingDay.data?.results || [])
+                      .filter((m: any) => m.media_type !== 'person')
+                      .map((m: any) =>
+                        m.media_type === 'tv' || (!m.title && m.name) ? (
+                          <TVCard key={`t-${m.id}`} show={m} variant="backdrop" />
+                        ) : (
+                          <MovieCard key={`m-${m.id}`} movie={m} variant="backdrop" />
+                        )
+                      )}
+                  </HorizontalList>
+                </Section>
+              )}
+              {(popularMovies.data?.results || []).length > 0 && (
+                <Section title="Popular Movies">
+                  <HorizontalList>
+                    {(popularMovies.data?.results || []).map((m) => (
+                      <MovieCard key={m.id} movie={m} />
+                    ))}
+                  </HorizontalList>
+                </Section>
+              )}
+              {(popularTV.data?.results || []).length > 0 && (
+                <Section title="Popular TV Shows">
+                  <HorizontalList>
+                    {(popularTV.data?.results || []).map((s) => (
+                      <TVCard key={s.id} show={s} />
+                    ))}
+                  </HorizontalList>
+                </Section>
+              )}
+              {!recsLoading &&
+                !(trendingDay.data?.results || []).length &&
+                !(popularMovies.data?.results || []).length && (
+                  <EmptyState
+                    title="Search CineCue"
+                    message="Find your favorite movies, TV shows, and celebrities"
+                  />
+                )}
+            </>
+          )}
+        </ScrollView>
       ) : results.length === 0 ? (
         <EmptyState
           title="No results found"

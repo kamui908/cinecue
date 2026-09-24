@@ -6,9 +6,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import {
-  PlayfairDisplay_700Bold,
-  PlayfairDisplay_800ExtraBold,
-} from "@expo-google-fonts/playfair-display";
+  Fredoka_300Light,
+  Fredoka_400Regular,
+  Fredoka_500Medium,
+  Fredoka_600SemiBold,
+  Fredoka_700Bold,
+} from "@expo-google-fonts/fredoka";
 import { WatchlistProvider } from "../src/context/WatchlistContext";
 import { GluestackUIProvider } from "../src/components/ui/gluestack-ui-provider";
 import { ThemeProvider, useTheme } from "../src/theme/ThemeContext";
@@ -36,7 +39,7 @@ function App() {
           <Stack
             screenOptions={{
               headerShown: false,
-              contentStyle: { backgroundColor: isDark ? "#121212" : "#f2f2f2" },
+              contentStyle: { backgroundColor: isDark ? "#171717" : "#f2f2f2" },
               animation: "slide_from_right",
             }}
           />
@@ -48,8 +51,11 @@ function App() {
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
-    PlayfairDisplay_700Bold,
-    PlayfairDisplay_800ExtraBold,
+    Fredoka_300Light,
+    Fredoka_400Regular,
+    Fredoka_500Medium,
+    Fredoka_600SemiBold,
+    Fredoka_700Bold,
   });
 
   useEffect(() => {

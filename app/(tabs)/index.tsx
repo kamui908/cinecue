@@ -3,7 +3,7 @@ import { RefreshControl, ScrollView, useWindowDimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Box, Text, Pressable, Image, HStack, VStack } from '../../src/components/ui/gluestack';
 import { Link } from 'expo-router';
-import { useTrendingMovies, useTrendingTV, useNowPlayingMovies, usePopularMovies, useTrendingPeople } from '../../src/hooks/useTMDB';
+import { useTrendingAll, useTrendingMovies, useTrendingTV, useDiscoverMovies } from '../../src/hooks/useTMDB';
 import { MovieCard } from '../../src/components/MovieCard';
 import { TVCard } from '../../src/components/TVCard';
 import { PersonCard } from '../../src/components/PersonCard';
@@ -17,14 +17,17 @@ export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const { width: windowWidth } = useWindowDimensions();
   const { resolved, toggle } = useTheme();
-  const pageBg = resolved === 'dark' ? '#121212' : '#F7F7F7';
+  const pageBg = resolved === 'dark' ? '#171717' : '#F7F7F7';
+  const trendingAll = useTrendingAll('week');
+  const topToday = useTrendingAll('day');
   const trendingMovies = useTrendingMovies('week');
   const trendingTV = useTrendingTV('week');
-  const nowPlaying = useNowPlayingMovies();
-  const popularMovies = usePopularMovies();
-  const trendingPeople = useTrendingPeople('week');
+  const sciFi = useDiscoverMovies({ with_genres: '878' });
+  const drama = useDiscoverMovies({ with_genres: '18' });
+  const comedy = useDiscoverMovies({ with_genres: '35' });
+  const horror = useDiscoverMovies({ with_genres: '27' });
 
-  const isLoading = trendingMovies.isLoading && trendingTV.isLoading;
+  const isLoading = trendingMovies.isLoading && trendingTV.isLoading && trendingAll.isLoading;
   const [refreshing, setRefreshing] = React.useState(false);
 
   const heroItems = (trendingMovies.data?.results || []).slice(0, 8);
@@ -45,14 +48,29 @@ export default function HomeScreen() {
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     await Promise.all([
+      trendingAll.refetch(),
+      topToday.refetch(),
       trendingMovies.refetch(),
       trendingTV.refetch(),
-      nowPlaying.refetch(),
-      popularMovies.refetch(),
-      trendingPeople.refetch(),
+      sciFi.refetch(),
+      drama.refetch(),
+      comedy.refetch(),
+      horror.refetch(),
     ]);
     setRefreshing(false);
   }, []);
+
+  const renderMixed = (items: any[] = []) =>
+    items.map((item) => {
+      const key = `${item.media_type || 'movie'}-${item.id}`;
+      if (item.media_type === 'person') return <PersonCard key={key} person={item} />;
+      const isTV = item.media_type === 'tv' || (!item.title && !!item.name);
+      return isTV ? (
+        <TVCard key={key} show={item} variant="backdrop" />
+      ) : (
+        <MovieCard key={key} movie={item} variant="backdrop" />
+      );
+    });
 
   return (
     <ScrollView
@@ -69,10 +87,7 @@ export default function HomeScreen() {
       {/* Header */}
       <Box className="px-4 mb-6 flex-row items-center justify-between">
         <Box>
-          <Text className="text-typography-400 text-[11px] uppercase tracking-[3px]">
-            Welcome back
-          </Text>
-          <Text className="text-typography-50 font-heading text-4xl mt-1">
+          <Text className="text-typography-50 font-heading text-6xl md:text-8xl">
             Cine<Text className="text-primary-500 font-heading">Cue</Text>
           </Text>
         </Box>
@@ -194,10 +209,10 @@ export default function HomeScreen() {
             </Box>
           )}
 
-          {/* Trending Movies */}
+          {/* Trending (general) */}
           <Section
-            title="Trending Movies"
-            subtitle="This week"
+            title="Trending"
+            subtitle="Movies, TV & people this week"
             action={
               <Box className="bg-primary-500/20 rounded-full px-3 py-1 flex-row items-center gap-1">
                 <Icons.Zap size={12} color="#ef4444" />
@@ -206,41 +221,28 @@ export default function HomeScreen() {
             }
           >
             <HorizontalList>
-              {(trendingMovies.data?.results || []).map((movie) => (
-                <MovieCard key={movie.id} movie={movie} variant="backdrop" />
-              ))}
+              {renderMixed(trendingAll.data?.results)}
             </HorizontalList>
           </Section>
 
-          {/* Now Playing */}
-          <Section title="Now Playing" subtitle="In theaters">
+          {/* Top Today */}
+          <Section
+            title="Top Today"
+            subtitle="What's buzzing right now"
+            action={
+              <Box className="bg-info-500/20 rounded-full px-3 py-1 flex-row items-center gap-1">
+                <Icons.TrendingUp size={12} color="#22d3ee" />
+                <Text className="text-info-500 text-xs font-semibold">Today</Text>
+              </Box>
+            }
+          >
             <HorizontalList>
-              {(nowPlaying.data?.results || []).slice(0, 15).map((movie) => (
-                <MovieCard key={movie.id} movie={movie} />
-              ))}
-            </HorizontalList>
-          </Section>
-
-          {/* Popular Movies */}
-          <Section title="Popular Movies">
-            <HorizontalList>
-              {(popularMovies.data?.results || []).map((movie) => (
-                <MovieCard key={movie.id} movie={movie} />
-              ))}
+              {renderMixed(topToday.data?.results)}
             </HorizontalList>
           </Section>
 
           {/* Trending TV */}
-          <Section
-            title="Trending TV"
-            subtitle="This week"
-            action={
-              <Box className="bg-info-500/20 rounded-full px-3 py-1 flex-row items-center gap-1">
-                <Icons.TrendingUp size={12} color="#22d3ee" />
-                <Text className="text-info-500 text-xs font-semibold">Trending</Text>
-              </Box>
-            }
-          >
+          <Section title="Trending TV" subtitle="This week">
             <HorizontalList>
               {(trendingTV.data?.results || []).map((show) => (
                 <TVCard key={show.id} show={show} variant="backdrop" />
@@ -248,11 +250,47 @@ export default function HomeScreen() {
             </HorizontalList>
           </Section>
 
-          {/* Trending People */}
-          <Section title="Trending People" subtitle="This week">
+          {/* Trending Movies */}
+          <Section title="Trending Movies" subtitle="This week">
             <HorizontalList>
-              {(trendingPeople.data?.results || []).map((person) => (
-                <PersonCard key={person.id} person={person} />
+              {(trendingMovies.data?.results || []).map((movie) => (
+                <MovieCard key={movie.id} movie={movie} variant="backdrop" />
+              ))}
+            </HorizontalList>
+          </Section>
+
+          {/* Sci-Fi */}
+          <Section title="Sci-Fi" subtitle="Genre">
+            <HorizontalList>
+              {(sciFi.data?.results || []).slice(0, 15).map((movie) => (
+                <MovieCard key={movie.id} movie={movie} />
+              ))}
+            </HorizontalList>
+          </Section>
+
+          {/* Drama */}
+          <Section title="Drama" subtitle="Genre">
+            <HorizontalList>
+              {(drama.data?.results || []).slice(0, 15).map((movie) => (
+                <MovieCard key={movie.id} movie={movie} />
+              ))}
+            </HorizontalList>
+          </Section>
+
+          {/* Comedy */}
+          <Section title="Comedy" subtitle="Genre">
+            <HorizontalList>
+              {(comedy.data?.results || []).slice(0, 15).map((movie) => (
+                <MovieCard key={movie.id} movie={movie} />
+              ))}
+            </HorizontalList>
+          </Section>
+
+          {/* Horror */}
+          <Section title="Horror" subtitle="Genre">
+            <HorizontalList>
+              {(horror.data?.results || []).slice(0, 15).map((movie) => (
+                <MovieCard key={movie.id} movie={movie} />
               ))}
             </HorizontalList>
           </Section>

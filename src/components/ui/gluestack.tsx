@@ -18,7 +18,7 @@ export const Box = React.forwardRef<any, any>(({ className, ...props }, ref) => 
 Box.displayName = 'Box';
 
 export const Text = React.forwardRef<any, any>(({ className, ...props }, ref) => (
-  <RNText ref={ref} className={cn(className)} {...props} />
+  <RNText ref={ref} className={cn('font-sans', className)} {...props} />
 ));
 Text.displayName = 'Text';
 
@@ -91,7 +91,7 @@ export const InputField = React.forwardRef<any, any>(
   ({ className, ...props }, ref) => (
     <TextInput
       ref={ref}
-      className={cn('flex-1 px-3 py-2 text-typography-900', className)}
+      className={cn('flex-1 px-3 py-2 text-typography-900 font-sans', className)}
       placeholderTextColor="#94a3b8"
       {...props}
     />

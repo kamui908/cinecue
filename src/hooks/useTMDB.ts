@@ -162,3 +162,26 @@ export function useDiscoverTV(params: Record<string, string> = {}) {
     queryFn: () => tmdb.discoverTV(params),
   });
 }
+
+export function useTrendingAll(timeWindow: 'day' | 'week' = 'week') {
+  return useQuery({
+    queryKey: ['trending', 'all', timeWindow],
+    queryFn: () => tmdb.getTrendingAll(timeWindow),
+  });
+}
+
+export function useTopRatedByGenre(mediaType: 'movie' | 'tv', genreId: number | null) {
+  return useQuery({
+    queryKey: ['topRatedByGenre', mediaType, genreId],
+    queryFn: async () => {
+      const params = {
+        with_genres: String(genreId),
+        sort_by: 'vote_average.desc',
+        'vote_count.gte': '100',
+      };
+      const res = mediaType === 'movie' ? await tmdb.discoverMovies(params) : await tmdb.discoverTV(params);
+      return res as { results: any[] };
+    },
+    enabled: genreId != null,
+  });
+}

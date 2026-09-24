@@ -47,7 +47,7 @@ export default function ProfileScreen() {
             <Box key={stat.label} className="flex-1 items-center">
               <StatIcon size={24} color="#ef4444" className="mb-1" />
               <Text className="text-typography-50 text-xl font-bold">{stat.value}</Text>
-              <Text className="text-typography-400 text-[10px] mt-1">{stat.label}</Text>
+              <Text className="text-typography-400 text-2xs mt-1">{stat.label}</Text>
             </Box>
           );
         })}

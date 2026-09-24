@@ -89,7 +89,7 @@ export default function WatchlistScreen() {
                     />
                   ) : (
                     <Box className="w-12 h-[72px] rounded-lg bg-background-800 items-center justify-center">
-                      <Text className="text-typography-400 text-[10px]">No</Text>
+                      <Text className="text-typography-400 text-2xs">No</Text>
                     </Box>
                   )}
                   <Box className="flex-1">

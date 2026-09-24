@@ -69,7 +69,7 @@ export function TVCard({ show, variant = 'poster' }: Props) {
               />
             ) : (
               <Box className="w-12 h-[72px] rounded-lg bg-background-700 items-center justify-center">
-                <Text className="text-typography-400 text-[10px]">No</Text>
+                <Text className="text-typography-400 text-2xs">No</Text>
               </Box>
             )}
             <VStack className="flex-1">
@@ -111,7 +111,7 @@ export function TVCard({ show, variant = 'poster' }: Props) {
             <Box className="absolute top-2 right-2">
               <HStack className="items-center gap-1 px-1.5 py-0.5 rounded-full bg-background-900/80">
                 <Icons.Star size={10} className={getRatingColor(show.vote_average)} />
-                <Text className={`text-[10px] font-bold ${getRatingColor(show.vote_average)}`}>
+                <Text className={`text-2xs font-bold ${getRatingColor(show.vote_average)}`}>
                   {formatRating(show.vote_average)}
                 </Text>
               </HStack>
@@ -120,7 +120,7 @@ export function TVCard({ show, variant = 'poster' }: Props) {
           <Text className="text-typography-50 text-xs font-semibold mt-2" numberOfLines={1}>
             {show.name}
           </Text>
-          <Text className="text-typography-400 text-[11px] mt-0.5">
+          <Text className="text-typography-400 text-xs mt-0.5">
             {formatYear(show.first_air_date)}
           </Text>
         </Box>

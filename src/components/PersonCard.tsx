@@ -32,7 +32,7 @@ export function PersonCard({ person }: Props) {
           <Text className="text-typography-50 text-xs font-semibold mt-2 text-center" numberOfLines={1}>
             {person.name}
           </Text>
-          <Text className="text-typography-400 text-[10px] mt-0.5" numberOfLines={1}>
+          <Text className="text-typography-400 text-2xs mt-0.5" numberOfLines={1}>
             {person.known_for_department}
           </Text>
         </VStack>

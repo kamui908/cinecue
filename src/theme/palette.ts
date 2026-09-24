@@ -159,13 +159,13 @@ export const darkVars: Vars = {
   "--color-background-600": "32 32 32",
   "--color-background-700": "44 44 44",
   "--color-background-800": "30 30 30",
-  "--color-background-900": "18 18 18",
-  "--color-background-950": "15 15 15",
+  "--color-background-900": "23 23 23",
+  "--color-background-950": "23 23 23",
 };
 
 export const NAV_COLORS = {
   dark: {
-    background: "#121212",
+    background: "#171717",
     border: "#262626",
     inactive: "#64748b",
   },

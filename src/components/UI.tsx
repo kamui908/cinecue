@@ -119,7 +119,7 @@ export function RatingBadge({ rating, size = 'md' }: RatingBadgeProps) {
     lg: 'w-12 h-12',
   };
 
-  const textSize = size === 'sm' ? 'text-[10px]' : size === 'md' ? 'text-xs' : 'text-sm';
+  const textSize = size === 'sm' ? 'text-2xs' : size === 'md' ? 'text-xs' : 'text-sm';
 
   return (
     <Center className={`${bg} rounded-full ${sizeClasses[size]}`}>
@@ -133,11 +133,39 @@ export function RatingBadge({ rating, size = 'md' }: RatingBadgeProps) {
   );
 }
 
-export function GenreTag({ name }: { name: string }) {
-  return (
-    <Badge className="bg-background-700 rounded-full px-3 py-1 mr-2 mb-2">
-      <Text className="text-typography-400 text-xs">{name}</Text>
+interface GenreTagProps {
+  name: string;
+  onPress?: () => void;
+  selected?: boolean;
+}
+
+export function GenreTag({ name, onPress, selected }: GenreTagProps) {
+  const badge = (
+    <Badge
+      className={`${
+        selected ? 'bg-primary-500' : 'bg-background-700'
+      } rounded-full px-3 py-1 mr-2 mb-2`}
+    >
+      <Text
+        className={`${
+          selected ? 'text-white font-semibold' : 'text-typography-400'
+        } text-xs`}
+      >
+        {name}
+      </Text>
     </Badge>
+  );
+
+  if (!onPress) return badge;
+
+  return (
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityState={{ selected: !!selected }}
+    >
+      {badge}
+    </Pressable>
   );
 }
 

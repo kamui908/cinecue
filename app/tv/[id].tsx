@@ -159,7 +159,7 @@ export default function TVDetailScreen() {
                 {show.vote_average.toFixed(1)}
               </Text>
             </HStack>
-            <Text className="text-typography-400 text-[10px]">
+            <Text className="text-typography-400 text-2xs">
               {formatNumber(show.vote_count)} votes
             </Text>
           </Box>
@@ -192,7 +192,7 @@ export default function TVDetailScreen() {
             <Text className="text-typography-50 text-base font-bold mb-2">
               Overview
             </Text>
-            <Text className="text-typography-300 text-sm leading-5">
+            <Text className="text-typography-300 text-sm">
               {show.overview}
             </Text>
           </VStack>
@@ -255,7 +255,7 @@ export default function TVDetailScreen() {
                     >
                       {season.name}
                     </Text>
-                    <Text className="text-typography-400 text-[10px] mt-0.5">
+                    <Text className="text-typography-400 text-2xs mt-0.5">
                       {season.episode_count} ep
                     </Text>
                   </Box>

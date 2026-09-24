@@ -31,6 +31,9 @@ async function fetchTMDB<T>(endpoint: string, params: Record<string, string> = {
 }
 
 // Movies
+export const getTrendingAll = (timeWindow: 'day' | 'week' = 'week') =>
+  fetchTMDB<{ page?: number; results: any[] }>(`/trending/all/${timeWindow}`);
+
 export const getTrendingMovies = (timeWindow: 'day' | 'week' = 'week') =>
   fetchTMDB<MovieResponse>(`/trending/movie/${timeWindow}`);
 

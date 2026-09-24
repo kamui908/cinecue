@@ -1,5 +1,10 @@
 import gluestackPlugin from "@gluestack-ui/nativewind-utils/tailwind-plugin";
 
+// Global text-size knob: 1 = base scale, 1.5 = +50%
+const FONT_SCALE = 1.5;
+const fs = (size, lineHeight) =>
+  `${Math.round(size * FONT_SCALE)}px/${Math.round(lineHeight * FONT_SCALE)}px`;
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: "class",
@@ -175,12 +180,26 @@ module.exports = {
         },
       },
       fontFamily: {
-        heading: ["PlayfairDisplay_700Bold", "Georgia", "serif"],
-        body: undefined,
+        heading: ["Fredoka_700Bold", "Fredoka_400Regular", "Fredoka", "sans-serif"],
+        body: ["Fredoka_400Regular", "Fredoka", "sans-serif"],
+        sans: ["Fredoka_400Regular", "Fredoka", "sans-serif"],
         mono: undefined,
       },
       fontSize: {
-        "2xs": "10px",
+        "2xs": fs(12, 16),
+        xs: fs(14, 20),
+        sm: fs(16, 24),
+        base: fs(18, 28),
+        lg: fs(20, 28),
+        xl: fs(24, 32),
+        "2xl": fs(30, 36),
+        "3xl": fs(36, 40),
+        "4xl": fs(48, 48),
+        "5xl": fs(60, 60),
+        "6xl": fs(72, 72),
+        "7xl": fs(96, 96),
+        "8xl": fs(128, 128),
+        "9xl": fs(160, 160),
       },
     },
   },
