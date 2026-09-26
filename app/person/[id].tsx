@@ -20,6 +20,7 @@ import {
   Center,
 } from '../../src/components/ui/gluestack';
 import { Icons } from '../../src/components/Icons';
+import { WebFooter } from '../../src/components/WebFooter';
 import { useTheme } from '../../src/theme/ThemeContext';
 
 export default function PersonDetailScreen() {
@@ -257,6 +258,7 @@ export default function PersonDetailScreen() {
           </HorizontalList>
         </Section>
       )}
+      <WebFooter />
     </ScrollView>
   );
 }

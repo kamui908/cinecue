@@ -7,6 +7,7 @@ import { CastList } from '../../src/components/CastList';
 import { TVCard } from '../../src/components/TVCard';
 import { Section, HorizontalList, GenreTag, StatItem, LoadingSpinner } from '../../src/components/UI';
 import { useWatchlist } from '../../src/context/WatchlistContext';
+import { useRequireAccount } from '../../src/hooks/useRequireAccount';
 import { formatDate, formatNumber, formatRuntime } from '../../src/utils/format';
 import {
   Box,
@@ -20,6 +21,7 @@ import {
   Center,
 } from '../../src/components/ui/gluestack';
 import { Icons } from '../../src/components/Icons';
+import { WebFooter } from '../../src/components/WebFooter';
 import { useTheme } from '../../src/theme/ThemeContext';
 
 export default function TVDetailScreen() {
@@ -35,6 +37,7 @@ export default function TVDetailScreen() {
     removeFromFavorites,
     isFavorite,
   } = useWatchlist();
+  const requireAccount = useRequireAccount();
 
   if (isLoading) return <LoadingSpinner />;
   if (!show) return null;
@@ -97,18 +100,32 @@ export default function TVDetailScreen() {
         {/* Actions */}
         <HStack className="absolute top-12 right-4 gap-2">
           <Pressable
-            onPress={() =>
-              isFav
-                ? removeFromFavorites(show.id, 'tv')
-                : addToFavorites(
-                    {
-                      id: show.id,
-                      name: show.name,
-                      poster_path: show.poster_path,
-                    },
-                    'tv'
-                  )
-            }
+            onPress={() => {
+              if (isFav) {
+                removeFromFavorites(show.id, 'tv');
+                return;
+              }
+              if (
+                !requireAccount({
+                  list: 'favorites',
+                  mediaType: 'tv',
+                  item: {
+                    id: show.id,
+                    name: show.name,
+                    poster_path: show.poster_path,
+                  },
+                })
+              )
+                return;
+              addToFavorites(
+                {
+                  id: show.id,
+                  name: show.name,
+                  poster_path: show.poster_path,
+                },
+                'tv'
+              );
+            }}
             className="bg-background-900/80 rounded-full p-2"
           >
             {isFav ? (
@@ -118,18 +135,32 @@ export default function TVDetailScreen() {
             )}
           </Pressable>
           <Pressable
-            onPress={() =>
-              inWatchlist
-                ? removeFromWatchlist(show.id, 'tv')
-                : addToWatchlist(
-                    {
-                      id: show.id,
-                      name: show.name,
-                      poster_path: show.poster_path,
-                    },
-                    'tv'
-                  )
-            }
+            onPress={() => {
+              if (inWatchlist) {
+                removeFromWatchlist(show.id, 'tv');
+                return;
+              }
+              if (
+                !requireAccount({
+                  list: 'watchlist',
+                  mediaType: 'tv',
+                  item: {
+                    id: show.id,
+                    name: show.name,
+                    poster_path: show.poster_path,
+                  },
+                })
+              )
+                return;
+              addToWatchlist(
+                {
+                  id: show.id,
+                  name: show.name,
+                  poster_path: show.poster_path,
+                },
+                'tv'
+              );
+            }}
             className="bg-background-900/80 rounded-full p-2"
           >
             {inWatchlist ? (
@@ -597,6 +628,7 @@ export default function TVDetailScreen() {
           </Section>
         )}
       </VStack>
+      <WebFooter />
     </ScrollView>
   );
 }

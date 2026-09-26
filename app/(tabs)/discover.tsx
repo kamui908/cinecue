@@ -25,6 +25,7 @@ import {
 } from '../../src/components/UI';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icons } from '../../src/components/Icons';
+import { WebFooter } from '../../src/components/WebFooter';
 
 type TabType = 'movies' | 'tv';
 
@@ -234,6 +235,7 @@ export default function DiscoverScreen() {
           )}
         </Section>
       )}
+      <WebFooter />
     </ScrollView>
   );
 }

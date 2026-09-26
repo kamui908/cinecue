@@ -10,6 +10,7 @@ import { PersonCard } from '../../src/components/PersonCard';
 import { Section, HorizontalList, LoadingSpinner } from '../../src/components/UI';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icons } from '../../src/components/Icons';
+import { WebFooter } from '../../src/components/WebFooter';
 import { Images } from '../../src/api/tmdb';
 import { useTheme } from '../../src/theme/ThemeContext';
 
@@ -321,6 +322,7 @@ export default function HomeScreen() {
           </Section>
         </>
       )}
+      <WebFooter />
     </ScrollView>
   );
 }

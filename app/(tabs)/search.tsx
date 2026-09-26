@@ -9,6 +9,7 @@ import { EmptyState, LoadingSpinner, Section, HorizontalList } from '../../src/c
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Movie, TVShow, Person } from '../../src/types/tmdb';
 import { Icons } from '../../src/components/Icons';
+import { WebFooter } from '../../src/components/WebFooter';
 
 type FilterType = 'multi' | 'movie' | 'tv' | 'person';
 
@@ -197,6 +198,7 @@ export default function SearchScreen() {
                 )}
             </>
           )}
+          <WebFooter />
         </ScrollView>
       ) : results.length === 0 ? (
         <EmptyState
@@ -208,6 +210,7 @@ export default function SearchScreen() {
           data={results}
           renderItem={renderResultItem}
           keyExtractor={(item) => `${item.id}-${Math.random()}`}
+          ListFooterComponent={<WebFooter />}
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
           onScrollBeginDrag={() => Keyboard.dismiss()}

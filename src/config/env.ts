@@ -16,3 +16,11 @@ export const MONGODB_URI: string | undefined =
 
 export const isMongoConfigured = (): boolean =>
   !!MONGODB_URI && MONGODB_URI.length > 0;
+
+// Base URL of the deployed cinecue-server (see backend/). Client-safe: it is
+// only a public https origin, so it uses the EXPO_PUBLIC_ prefix and is
+// inlined into the app bundle at build time.
+export const API_URL: string =
+  (typeof process !== 'undefined' ? process.env?.EXPO_PUBLIC_API_URL : undefined) || '';
+
+export const isApiConfigured = (): boolean => API_URL.length > 0;

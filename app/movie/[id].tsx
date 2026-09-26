@@ -7,6 +7,7 @@ import { CastList } from '../../src/components/CastList';
 import { MovieCard } from '../../src/components/MovieCard';
 import { Section, HorizontalList, GenreTag, StatItem, LoadingSpinner } from '../../src/components/UI';
 import { useWatchlist } from '../../src/context/WatchlistContext';
+import { useRequireAccount } from '../../src/hooks/useRequireAccount';
 import { formatCurrency, formatRuntime, formatDate, formatNumber } from '../../src/utils/format';
 import {
   Box,
@@ -20,6 +21,7 @@ import {
   Center,
 } from '../../src/components/ui/gluestack';
 import { Icons } from '../../src/components/Icons';
+import { WebFooter } from '../../src/components/WebFooter';
 import { useTheme } from '../../src/theme/ThemeContext';
 
 export default function MovieDetailScreen() {
@@ -35,6 +37,7 @@ export default function MovieDetailScreen() {
     removeFromFavorites,
     isFavorite,
   } = useWatchlist();
+  const requireAccount = useRequireAccount();
 
   if (isLoading) return <LoadingSpinner />;
   if (!movie) return null;
@@ -100,18 +103,32 @@ export default function MovieDetailScreen() {
         {/* Actions */}
         <HStack className="absolute top-12 right-4 gap-2">
           <Pressable
-            onPress={() =>
-              isFav
-                ? removeFromFavorites(movie.id, 'movie')
-                : addToFavorites(
-                    {
-                      id: movie.id,
-                      title: movie.title,
-                      poster_path: movie.poster_path,
-                    },
-                    'movie'
-                  )
-            }
+            onPress={() => {
+              if (isFav) {
+                removeFromFavorites(movie.id, 'movie');
+                return;
+              }
+              if (
+                !requireAccount({
+                  list: 'favorites',
+                  mediaType: 'movie',
+                  item: {
+                    id: movie.id,
+                    title: movie.title,
+                    poster_path: movie.poster_path,
+                  },
+                })
+              )
+                return;
+              addToFavorites(
+                {
+                  id: movie.id,
+                  title: movie.title,
+                  poster_path: movie.poster_path,
+                },
+                'movie'
+              );
+            }}
             className="bg-background-900/80 rounded-full p-2"
           >
             {isFav ? (
@@ -121,18 +138,32 @@ export default function MovieDetailScreen() {
             )}
           </Pressable>
           <Pressable
-            onPress={() =>
-              inWatchlist
-                ? removeFromWatchlist(movie.id, 'movie')
-                : addToWatchlist(
-                    {
-                      id: movie.id,
-                      title: movie.title,
-                      poster_path: movie.poster_path,
-                    },
-                    'movie'
-                  )
-            }
+            onPress={() => {
+              if (inWatchlist) {
+                removeFromWatchlist(movie.id, 'movie');
+                return;
+              }
+              if (
+                !requireAccount({
+                  list: 'watchlist',
+                  mediaType: 'movie',
+                  item: {
+                    id: movie.id,
+                    title: movie.title,
+                    poster_path: movie.poster_path,
+                  },
+                })
+              )
+                return;
+              addToWatchlist(
+                {
+                  id: movie.id,
+                  title: movie.title,
+                  poster_path: movie.poster_path,
+                },
+                'movie'
+              );
+            }}
             className="bg-background-900/80 rounded-full p-2"
           >
             {inWatchlist ? (
@@ -530,6 +561,7 @@ export default function MovieDetailScreen() {
           </Section>
         )}
       </VStack>
+      <WebFooter />
     </ScrollView>
   );
 }

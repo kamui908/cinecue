@@ -16,7 +16,7 @@ const LIBRARY_LINKS = [
   { label: 'Profile', href: '/profile' },
 ] as const;
 
-/** Site footer rendered on web only, below the tab content. */
+/** Site footer rendered on web only, at the end of each page's scroll content. */
 export function WebFooter() {
   const router = useRouter();
   if (Platform.OS !== 'web') return null;
@@ -26,21 +26,6 @@ export function WebFooter() {
   return (
     <Box className="bg-background-950 border-t border-background-800 px-6 md:px-10 pt-8 pb-6">
       <Box className="flex-col md:flex-row gap-8 md:gap-6">
-        {/* Brand */}
-        <VStack className="flex-1 gap-2">
-          <Text className="font-heading text-2xl text-typography-50">
-            Cine<Text className="text-primary-500 font-heading">Cue</Text>
-          </Text>
-          <Text className="text-typography-400 text-sm max-w-[320px]">
-            Track what you watch. Discover movies and shows, build your
-            watchlist, and keep your favorites close.
-          </Text>
-          <HStack className="items-center gap-1.5 mt-1">
-            <Icons.Clapperboard size={14} color="#64748b" />
-            <Text className="text-typography-400 text-xs">CineCue v1.1.0</Text>
-          </HStack>
-        </VStack>
-
         {/* Explore */}
         <VStack className="gap-1 min-w-[140px]">
           <Text className="text-typography-50 text-sm font-bold uppercase tracking-widest mb-1">
@@ -86,6 +71,21 @@ export function WebFooter() {
             Movie and TV data provided by TMDB. This product uses the TMDB API
             but is not endorsed or certified by TMDB.
           </Text>
+        </VStack>
+
+        {/* Brand */}
+        <VStack className="flex-1 gap-2">
+          <Text className="font-heading text-2xl text-typography-50">
+            Cine<Text className="text-primary-500 font-heading">Cue</Text>
+          </Text>
+          <Text className="text-typography-400 text-sm max-w-[320px]">
+            Track what you watch. Discover movies and shows, build your
+            watchlist, and keep your favorites close.
+          </Text>
+          <HStack className="items-center gap-1.5 mt-1">
+            <Icons.Clapperboard size={14} color="#64748b" />
+            <Text className="text-typography-400 text-xs">CineCue v1.1.0</Text>
+          </HStack>
         </VStack>
       </Box>
 
