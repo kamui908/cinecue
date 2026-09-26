@@ -68,8 +68,7 @@ export function WebFooter() {
             About
           </Text>
           <Text className="text-typography-400 text-sm max-w-[320px]">
-            Movie and TV data provided by TMDB. This product uses the TMDB API
-            but is not endorsed or certified by TMDB.
+            Movie and TV data provided by TMDB.
           </Text>
         </VStack>
 
@@ -94,7 +93,7 @@ export function WebFooter() {
           © 2026 CineCue. All rights reserved.
         </Text>
         <Text className="text-typography-400 text-xs">
-          Powered by TMDB • Made for movie lovers
+          Powered by TMDB • Made with ❤️ by Kamui
         </Text>
       </Box>
     </Box>

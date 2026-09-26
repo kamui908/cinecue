@@ -8,6 +8,8 @@ import { TVCard } from '../../src/components/TVCard';
 import { Section, HorizontalList, GenreTag, StatItem, LoadingSpinner } from '../../src/components/UI';
 import { useWatchlist } from '../../src/context/WatchlistContext';
 import { useRequireAccount } from '../../src/hooks/useRequireAccount';
+import { useSettings } from '../../src/context/SettingsContext';
+import { TrailerBackdrop } from '../../src/components/TrailerBackdrop';
 import { formatDate, formatNumber, formatRuntime } from '../../src/utils/format';
 import {
   Box,
@@ -38,6 +40,7 @@ export default function TVDetailScreen() {
     isFavorite,
   } = useWatchlist();
   const requireAccount = useRequireAccount();
+  const { autoplayTrailers, settingsReady } = useSettings();
 
   if (isLoading) return <LoadingSpinner />;
   if (!show) return null;
@@ -57,36 +60,14 @@ export default function TVDetailScreen() {
       className="flex-1 bg-background-950"
       contentContainerStyle={{ paddingBottom: 100 }}
     >
-      {/* Backdrop — tapping it opens the trailer */}
+      {/* Backdrop — autoplaying trailer when enabled, still otherwise */}
       <Box className="relative h-[280px]">
-        {show.backdrop_path ? (
-          trailer ? (
-            <Pressable
-              onPress={() =>
-                Linking.openURL(`https://www.youtube.com/watch?v=${trailer.key}`)
-              }
-              className="w-full h-full"
-              accessibilityRole="button"
-              accessibilityLabel="Play trailer"
-            >
-              <Image
-                source={{ uri: Images.backdrop(show.backdrop_path, 'original') }}
-                className="w-full h-full"
-                resizeMode="cover"
-                alt="Backdrop"
-              />
-            </Pressable>
-          ) : (
-            <Image
-              source={{ uri: Images.backdrop(show.backdrop_path, 'original') }}
-              className="w-full h-full"
-              resizeMode="cover"
-              alt="Backdrop"
-            />
-          )
-        ) : (
-          <Box className="w-full h-full bg-background-800" />
-        )}
+        <TrailerBackdrop
+          backdropPath={show.backdrop_path}
+          trailerKey={trailer?.key ?? null}
+          title={show.name}
+          autoplay={settingsReady && autoplayTrailers}
+        />
         <Box className="absolute inset-0 bg-gradient-to-t from-background-950 via-background-950/50 to-transparent" pointerEvents="none" />
 
         {/* Back Button */}

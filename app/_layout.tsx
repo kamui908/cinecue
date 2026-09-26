@@ -13,6 +13,7 @@ import {
   Fredoka_700Bold,
 } from "@expo-google-fonts/fredoka";
 import { AuthProvider } from "../src/context/AuthContext";
+import { SettingsProvider } from "../src/context/SettingsContext";
 import { WatchlistProvider } from "../src/context/WatchlistContext";
 import { GluestackUIProvider } from "../src/components/ui/gluestack-ui-provider";
 import { ThemeProvider, useTheme } from "../src/theme/ThemeContext";
@@ -36,16 +37,18 @@ function App() {
     <GluestackUIProvider mode={resolved}>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <WatchlistProvider>
-            <StatusBar style={isDark ? "light" : "dark"} />
-            <Stack
-              screenOptions={{
-                headerShown: false,
-                contentStyle: { backgroundColor: isDark ? "#171717" : "#f2f2f2" },
-                animation: "slide_from_right",
-              }}
-            />
-          </WatchlistProvider>
+          <SettingsProvider>
+            <WatchlistProvider>
+              <StatusBar style={isDark ? "light" : "dark"} />
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                  contentStyle: { backgroundColor: isDark ? "#171717" : "#f2f2f2" },
+                  animation: "slide_from_right",
+                }}
+              />
+            </WatchlistProvider>
+          </SettingsProvider>
         </AuthProvider>
       </QueryClientProvider>
     </GluestackUIProvider>

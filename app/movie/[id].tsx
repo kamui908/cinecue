@@ -8,6 +8,8 @@ import { MovieCard } from '../../src/components/MovieCard';
 import { Section, HorizontalList, GenreTag, StatItem, LoadingSpinner } from '../../src/components/UI';
 import { useWatchlist } from '../../src/context/WatchlistContext';
 import { useRequireAccount } from '../../src/hooks/useRequireAccount';
+import { useSettings } from '../../src/context/SettingsContext';
+import { TrailerBackdrop } from '../../src/components/TrailerBackdrop';
 import { formatCurrency, formatRuntime, formatDate, formatNumber } from '../../src/utils/format';
 import {
   Box,
@@ -38,6 +40,7 @@ export default function MovieDetailScreen() {
     isFavorite,
   } = useWatchlist();
   const requireAccount = useRequireAccount();
+  const { autoplayTrailers, settingsReady } = useSettings();
 
   if (isLoading) return <LoadingSpinner />;
   if (!movie) return null;
@@ -60,36 +63,14 @@ export default function MovieDetailScreen() {
       className="flex-1 bg-background-950"
       contentContainerStyle={{ paddingBottom: 100 }}
     >
-      {/* Backdrop — tapping it opens the trailer */}
+      {/* Backdrop — autoplaying trailer when enabled, still otherwise */}
       <Box className="relative h-[280px]">
-        {movie.backdrop_path ? (
-          trailer ? (
-            <Pressable
-              onPress={() =>
-                Linking.openURL(`https://www.youtube.com/watch?v=${trailer.key}`)
-              }
-              className="w-full h-full"
-              accessibilityRole="button"
-              accessibilityLabel="Play trailer"
-            >
-              <Image
-                source={{ uri: Images.backdrop(movie.backdrop_path, 'original') }}
-                className="w-full h-full"
-                resizeMode="cover"
-                alt="Backdrop"
-              />
-            </Pressable>
-          ) : (
-            <Image
-              source={{ uri: Images.backdrop(movie.backdrop_path, 'original') }}
-              className="w-full h-full"
-              resizeMode="cover"
-              alt="Backdrop"
-            />
-          )
-        ) : (
-          <Box className="w-full h-full bg-background-800" />
-        )}
+        <TrailerBackdrop
+          backdropPath={movie.backdrop_path}
+          trailerKey={trailer?.key ?? null}
+          title={movie.title}
+          autoplay={settingsReady && autoplayTrailers}
+        />
         <Box className="absolute inset-0 bg-gradient-to-t from-background-950 via-background-950/50 to-transparent" pointerEvents="none" />
 
         {/* Back Button */}

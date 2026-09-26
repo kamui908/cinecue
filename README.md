@@ -11,8 +11,13 @@ A movie and TV discovery app built with Expo, expo-router, NativeWind v4 and the
 - **Tracking gate** — heart/bookmark 
 - **Watchlist** — per-account watchlist + favorites, cached on device and merged /
   pushed to the server when online (offline edits queue locally)
-- **Profile** — account details, library stats, log out, change password, delete
-  account; guests get a sign-in CTA
+- **Profile** — account details, library stats, guests get a sign-in CTA
+- **Settings** (`/settings`) — Light/Dark/System appearance, trailer-autoplay
+  toggle (off by default), and account management (log out, change password,
+  delete account)
+- **Trailer autoplay** — movie/TV backdrops play the trailer automatically on web
+  (muted, per browser rules); elsewhere the backdrop still shows and tapping it
+  opens the trailer. Toggle in Settings → Playback.
 - **Movie / TV detail pages** 
 - **Person pages** — profile, biography, stats, acting / TV / crew credits
 - **Responsive navigation** — top menu bar (≥1100px), icon side rail (768–1099px), floating dock (<768px)
@@ -52,6 +57,7 @@ EXPO_PUBLIC_API_URL=https://your-deployment-link
 app/                    # expo-router routes
   (tabs)/               # Home, Search, Discover, Watchlist, Profile
   auth/                 # login, signup
+  settings.tsx          # appearance, playback, account
   movie/[id].tsx        # detail pages
   tv/[id].tsx
   person/[id].tsx
@@ -63,7 +69,9 @@ src/
   api/server.ts         # backend client (auth + lists)
   config/env.ts         # EXPO_PUBLIC_API_URL (client) / MONGODB_URI (server-only)
   context/AuthContext.tsx       # session, signup/login/logout, password, delete
+  context/SettingsContext.tsx   # trailer-autoplay preference (persisted, default on)
   context/WatchlistContext.tsx  # per-account lists, server sync, pending-action runner
+  components/TrailerBackdrop.tsx # backdrop slot: autoplay embed (web) or still
   hooks/useTMDB.ts      # React Query hooks
   hooks/useRequireAccount.ts    # tracking-tap auth gate
   components/           # MovieCard, TVCard, PersonCard, CastList, Nav, WebFooter, UI, Icons
