@@ -3,6 +3,7 @@ import { Platform, useWindowDimensions } from 'react-native';
 import { Tabs } from 'expo-router';
 import { Box } from '../../src/components/ui/gluestack';
 import { TopMenuBar, SideRail, FloatingDock } from '../../src/components/Nav';
+import { WebFooter } from '../../src/components/WebFooter';
 
 export default function TabLayout() {
   const { width } = useWindowDimensions();
@@ -26,6 +27,7 @@ export default function TabLayout() {
           {!showTopBar && !showRail && <FloatingDock />}
         </Box>
       </Box>
+      {isWeb && <WebFooter />}
     </Box>
   );
 }

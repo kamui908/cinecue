@@ -41,20 +41,33 @@ export interface MovieDetail {
   release_date: string;
   vote_average: number;
   vote_count: number;
+  popularity: number;
   runtime: number;
   genres: Genre[];
   tagline: string;
   status: string;
   budget: number;
   revenue: number;
+  adult: boolean;
+  homepage: string | null;
+  imdb_id: string | null;
+  original_language: string;
+  origin_country: string[];
   production_companies: ProductionCompany[];
+  production_countries: ProductionCountry[];
   spoken_languages: SpokenLanguage[];
   belongs_to_collection: Collection | null;
+  video: boolean;
   credits: Credits;
   videos: VideoResponse;
   similar: MovieResponse;
   recommendations: MovieResponse;
   images: ImageResponse;
+}
+
+export interface ProductionCountry {
+  iso_3166_1: string;
+  name: string;
 }
 
 export interface TVDetail {
@@ -76,7 +89,16 @@ export interface TVDetail {
   created_by: Creator[];
   seasons: Season[];
   production_companies: ProductionCompany[];
+  production_countries: ProductionCountry[];
   spoken_languages: SpokenLanguage[];
+  homepage: string | null;
+  popularity: number;
+  adult: boolean;
+  original_language: string;
+  origin_country: string[];
+  last_air_date: string;
+  type: string;
+  in_production: boolean;
   credits: Credits;
   videos: VideoResponse;
   similar: TVResponse;

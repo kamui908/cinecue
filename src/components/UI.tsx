@@ -206,10 +206,22 @@ interface StatItemProps {
 }
 
 export function StatItem({ label, value, className }: StatItemProps) {
+  // Fixed-width grid cell (no flex-1) so wrapped rows stay aligned on every screen.
+  // Parent must be a flex-row flex-wrap container without gaps (cells carry padding).
   return (
-    <Center className={`flex-1 ${className ?? ''}`}>
-      <Text className="text-typography-50 text-lg font-bold">{value}</Text>
-      <Text className="text-typography-400 text-xs mt-1">{label}</Text>
-    </Center>
+    <VStack className={`${className ?? 'w-1/2 md:w-1/4'} px-4 py-3 justify-start`}>
+      <Text
+        className="text-typography-400 text-2xs font-bold uppercase tracking-widest"
+        numberOfLines={1}
+      >
+        {label}
+      </Text>
+      <Text
+        className="text-typography-50 text-sm font-semibold mt-1 leading-snug"
+        numberOfLines={2}
+      >
+        {value}
+      </Text>
+    </VStack>
   );
 }

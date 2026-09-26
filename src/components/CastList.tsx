@@ -1,8 +1,9 @@
 import React from 'react';
-import { Box, Text, VStack, Pressable, Image, HStack } from './ui/gluestack';
+import { Box, Text, VStack, Pressable, Image } from './ui/gluestack';
 import { Link } from 'expo-router';
 import { Images } from '../api/tmdb';
 import { Cast } from '../types/tmdb';
+import { HorizontalList } from './UI';
 
 interface Props {
   cast: Cast[];
@@ -14,12 +15,12 @@ export function CastList({ cast }: Props) {
   return (
     <Box className="mb-6">
       <Text className="text-typography-50 text-lg font-bold px-4 mb-3">Top Billed Cast</Text>
-      <HStack className="flex-wrap justify-between px-4 gap-3">
+      <HorizontalList>
         {displayCast.map((member) => (
           <Link href={`/person/${member.id}`} key={member.id} asChild>
             <Pressable>
-              <VStack className="w-[100px] items-center">
-                <Box className="w-[100px] h-[100px] rounded-full overflow-hidden bg-background-800">
+              <VStack className="w-[120px] mr-3 items-center">
+                <Box className="w-[120px] h-[120px] rounded-full overflow-hidden bg-background-800">
                   {member.profile_path ? (
                     <Image
                       source={{ uri: Images.profile(member.profile_path, 'w185') }}
@@ -45,7 +46,7 @@ export function CastList({ cast }: Props) {
             </Pressable>
           </Link>
         ))}
-      </HStack>
+      </HorizontalList>
     </Box>
   );
 }

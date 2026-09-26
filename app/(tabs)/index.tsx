@@ -26,6 +26,7 @@ export default function HomeScreen() {
   const drama = useDiscoverMovies({ with_genres: '18' });
   const comedy = useDiscoverMovies({ with_genres: '35' });
   const horror = useDiscoverMovies({ with_genres: '27' });
+  const animation = useDiscoverMovies({ with_genres: '16' });
 
   const isLoading = trendingMovies.isLoading && trendingTV.isLoading && trendingAll.isLoading;
   const [refreshing, setRefreshing] = React.useState(false);
@@ -56,6 +57,7 @@ export default function HomeScreen() {
       drama.refetch(),
       comedy.refetch(),
       horror.refetch(),
+      animation.refetch(),
     ]);
     setRefreshing(false);
   }, []);
@@ -250,7 +252,7 @@ export default function HomeScreen() {
           <Section title="Trending TV" subtitle="This week">
             <HorizontalList>
               {(trendingTV.data?.results || []).map((show) => (
-                <TVCard key={show.id} show={show} variant="backdrop" />
+                <TVCard key={show.id} show={show} />
               ))}
             </HorizontalList>
           </Section>
@@ -259,7 +261,7 @@ export default function HomeScreen() {
           <Section title="Trending Movies" subtitle="This week">
             <HorizontalList>
               {(trendingMovies.data?.results || []).map((movie) => (
-                <MovieCard key={movie.id} movie={movie} variant="backdrop" />
+                <MovieCard key={movie.id} movie={movie} />
               ))}
             </HorizontalList>
           </Section>
@@ -295,6 +297,24 @@ export default function HomeScreen() {
           <Section title="Horror" subtitle="Genre">
             <HorizontalList>
               {(horror.data?.results || []).slice(0, 15).map((movie) => (
+                <MovieCard key={movie.id} movie={movie} />
+              ))}
+            </HorizontalList>
+          </Section>
+
+          {/* Animation */}
+          <Section
+            title="Animation"
+            subtitle="Genre"
+            action={
+              <Box className="bg-success-500/20 rounded-full px-3 py-1 flex-row items-center gap-1">
+                <Icons.Sparkles size={12} color="#22c55e" />
+                <Text className="text-success-500 text-xs font-semibold">Family</Text>
+              </Box>
+            }
+          >
+            <HorizontalList>
+              {(animation.data?.results || []).slice(0, 15).map((movie) => (
                 <MovieCard key={movie.id} movie={movie} />
               ))}
             </HorizontalList>
