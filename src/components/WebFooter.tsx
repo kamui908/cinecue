@@ -24,7 +24,7 @@ export function WebFooter() {
   const go = (href: string) => router.push(href as any);
 
   return (
-    <Box className="bg-background-950 border-t border-background-800 px-6 md:px-10 pt-8 pb-6">
+    <Box className="bg-background-950 px-6 md:px-10 pt-8 pb-6">
       <Box className="flex-col md:flex-row gap-8 md:gap-6">
         {/* Explore */}
         <VStack className="gap-1 min-w-[140px]">
@@ -88,7 +88,7 @@ export function WebFooter() {
         </VStack>
       </Box>
 
-      <Box className="border-t border-background-800 mt-6 pt-4 flex-col md:flex-row items-center justify-between gap-2">
+      <Box className="border-t border-background-800 mt-16 pt-2 flex-col md:flex-row items-center justify-between gap-2">
         <Text className="text-typography-400 text-xs">
           © 2026 CineCue. All rights reserved.
         </Text>

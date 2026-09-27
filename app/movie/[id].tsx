@@ -181,7 +181,7 @@ export default function MovieDetailScreen() {
           <VStack className="flex-1 w-full items-center md:items-start">
             {/* Title */}
             <VStack className="items-center md:items-start w-full">
-              <Text className="text-typography-50 text-4xl font-bold leading-tight text-center md:text-left">
+              <Text className="text-typography-50 text-2xl md:text-4xl font-bold leading-tight text-center md:text-left">
                 {movie.title}
               </Text>
               {movie.tagline ? (

@@ -143,7 +143,7 @@ export default function ProfileScreen() {
       {/* Footer */}
       <Box className="items-center mt-8 mb-6">
         <Text className="text-typography-400 text-xs">
-          CineCue v1.1.0 • Powered by TMDB
+          CineCue v1.1.0 • Powered by TMDB • Made with ❤️ by Kamui
         </Text>
       </Box>
       <WebFooter />
